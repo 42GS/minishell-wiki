@@ -166,6 +166,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - 따옴표(`'`, `"`) 내부 공백·메타문자 보존, `t_token->quoted` 비트마스크(`QUOTE_SINGLE`/`QUOTE_DOUBLE`), 1·2글자 연산자 분리, 단독 `&` 예외, 닫히지 않은 따옴표 감지 시 릭 프리 해제(`err=2`).
   - `tests/unit/test_lexer.c` 단위 테스트 작성 및 macOS `leaks` / Linux CI Valgrind 0바이트 릭 통과.
 - **PR & Roadmap Sync**: `42GS/minishell#35` CI 통과(`Norminette Check` + `Strict Build & Leak Verification`) 후 머지 완료 (`46cfea6`), `Issue #25` 자동 종료. `roadmap_and_issues.md` 갱신.
+
+## [2026-11-22] impl | Complete Code Issue #26: Recursive Descent AST Parser & Syntax Validator (PR #36)
+- **Context**: `42GS/minishell` `feat/26-ast-parser` 브랜치에서 EBNF 문법 기반 재귀 하향 파서 및 AST 빌더 구현, PR 머지 완료.
+- **Implementation Summary**:
+  - `src/parser/`: `parser.c`, `parser_cmd.c`, `parser_ast.c`, `parser_utils.c` 4개 모듈로 Norminette 엄격 분리 구현.
+  - `&&`/`||` < `|` < `( )` 서브셸 및 리다이렉션 우선순위·좌결합성 조립, 혼합 리다이렉션/단독 리다이렉션 명령 지원, Bash 표준 문법 오류(`err=2`) 및 부분 트리 릭 프리 해제(`join_ast_nodes`) 보장.
+  - `tests/unit/test_parser.c` 단위 테스트 작성 및 macOS `leaks` / Linux CI Valgrind 0바이트 릭 통과.
+- **PR & Roadmap Sync**: `42GS/minishell#36` CI 통과 후 머지 완료 (`f6e3cdd`), `Issue #26` 자동 종료 (M2 완료 -> M3 진입).
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
