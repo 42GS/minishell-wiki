@@ -1,7 +1,7 @@
 # Minishell Mandatory Requirements Specification
 
 > **Navigation**: [[index|Hub: Index]] | [[wiki/requirements/bonus|Bonus Spec]] | [[wiki/requirements/evaluation_matrix|Evaluation Matrix]]  
-> **Architecture Mappings**: [[wiki/architecture/01_parser_and_ast|Phase 1: Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2: Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3: Signal Dispatcher]]  
+> **Architecture Mappings**: [[wiki/architecture/01_parser_and_ast|Phase 1: Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2: Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3: Signal Dispatcher]] | [[wiki/architecture/04_builtins_and_env_table|Phase 4: Builtins & Env]]  
 > **Source**: [[raw/subject/en.subject|en.subject.md]] (v7.1) | **Reference**: [[raw/specs/bash_quoting|Quoting]], [[raw/specs/bash_expansions_and_wildcards|Expansions]], [[raw/specs/bash_builtins|Builtins]]  
 > **Status**: Ingested & Verified
 
@@ -96,10 +96,10 @@
 
 | 빌트인 | 요구사항 명세 | 부모 프로세스 직접 실행 필요성 | 구현 매핑 |
 | :--- | :--- | :--- | :--- |
-| `echo` | `-n` 옵션 지원 (연속된 `-nnnn` 지원 포함) | 서브셸/부모 무관 | [[wiki/architecture/02_execution_engine_and_ipc]] |
-| `cd` | 상대 또는 절대 경로만 지원 (옵션 없음) | **반드시 부모 프로세스** (작업 디렉토리 변경) | [[wiki/concepts/deep_dive_process_ipc_and_fd]] |
-| `pwd` | 옵션 없음 (현재 작업 디렉토리 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix]] |
-| `export` | 옵션 없음 (환경변수 설정 및 미인자 호출 시 목록 출력) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc]] |
-| `unset` | 옵션 없음 (환경변수 제거) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc]] |
-| `env` | 옵션/인자 없음 (현재 환경변수 목록 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix]] |
-| `exit` | 옵션 없음 (종료 코드 인자 지정 가능, 0~255 오버플로우 처리) | **반드시 부모 프로세스** (셸 프로세스 종료) | [[raw/specs/bash_exit_status]] |
+| `echo` | `-n` 옵션 지원 (연속된 `-nnnn` 지원 포함) | 서브셸/부모 무관 | [[wiki/architecture/04_builtins_and_env_table]] |
+| `cd` | 상대 또는 절대 경로만 지원 (옵션 없음) | **반드시 부모 프로세스** (작업 디렉토리 변경) | [[wiki/architecture/04_builtins_and_env_table]] |
+| `pwd` | 옵션 없음 (현재 작업 디렉토리 출력) | 서브셸/부모 무관 | [[wiki/architecture/04_builtins_and_env_table]] |
+| `export` | 옵션 없음 (환경변수 설정 및 미인자 호출 시 목록 출력) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/04_builtins_and_env_table]] |
+| `unset` | 옵션 없음 (환경변수 제거) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/04_builtins_and_env_table]] |
+| `env` | 옵션/인자 없음 (현재 환경변수 목록 출력) | 서브셸/부모 무관 | [[wiki/architecture/04_builtins_and_env_table]] |
+| `exit` | 옵션 없음 (종료 코드 인자 지정 가능, 0~255 오버플로우 처리) | **반드시 부모 프로세스** (셸 프로세스 종료) | [[wiki/architecture/04_builtins_and_env_table]] |

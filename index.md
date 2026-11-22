@@ -40,6 +40,7 @@
 | [deep_dive_lexer_parser_ast.md](wiki/concepts/deep_dive_lexer_parser_ast.md) | **[심화 1]** 왜 단순 split은 실패하는가? 오토마타(DFA), 문맥 자유 문법(CFG), 재귀 하향 파싱 및 확장 타이밍 논리 | [Deep Dive: Parser & CFG](wiki/concepts/deep_dive_lexer_parser_ast.md) |
 | [deep_dive_process_ipc_and_fd.md](wiki/concepts/deep_dive_process_ipc_and_fd.md) | **[심화 2]** `fork()` 커널 메모리 모델(CoW), FD 테이블 3단계 구조, 파이프라인 무한 행(Deadlock)과 EOF 법칙 | [Deep Dive: Process & FD](wiki/concepts/deep_dive_process_ipc_and_fd.md) |
 | [deep_dive_signals_and_concurrency.md](wiki/concepts/deep_dive_signals_and_concurrency.md) | **[심화 3]** 비동기 시그널(Signal)과 Self-Deadlock의 원리, `volatile sig_atomic_t`의 본질, 포그라운드 프로세스 그룹 제어 | [Deep Dive: Signals & Concurrency](wiki/concepts/deep_dive_signals_and_concurrency.md) |
+| [deep_dive_builtins_and_environment.md](wiki/concepts/deep_dive_builtins_and_environment.md) | **[심화 4]** 프로세스 가상 메모리 `environ` 레이아웃, CoW 격리와 부모 실행 필연성, 64비트 오버플로 방어 수학 | [Deep Dive: Builtins & Env](wiki/concepts/deep_dive_builtins_and_environment.md) |
 | [allowed_functions_matrix.md](wiki/concepts/allowed_functions_matrix.md) | 허용 외부 함수 53종 전수 분석, Async-Signal-Safe 판정 및 FD/메모리 주의점 | [Allowed Functions Matrix](wiki/concepts/allowed_functions_matrix.md) |
 
 ---
@@ -51,6 +52,7 @@
 | [01_parser_and_ast.md](wiki/architecture/01_parser_and_ast.md) | **[설계 1]** Lexer/Tokenizer DFA 규칙, EBNF 정형 문법, C 언어 AST 데이터 구조체 및 재귀 하향 파서 | [Phase 1: Parser & AST Architecture](wiki/architecture/01_parser_and_ast.md) |
 | [02_execution_engine_and_ipc.md](wiki/architecture/02_execution_engine_and_ipc.md) | **[설계 2]** AST 트리 순회 디스패처, 파이프라인 병렬 IPC 실행 엔진, FD 라이프사이클 및 종료 상태 수집 | [Phase 2: Execution Engine & IPC](wiki/architecture/02_execution_engine_and_ipc.md) |
 | [03_signal_dispatcher_and_state_machine.md](wiki/architecture/03_signal_dispatcher_and_state_machine.md) | **[설계 3]** 단일 전역 변수(`g_signal_num`) 격리, 3대 셸 시그널 상태 머신 및 터미널 에코 제어(`termios`) | [Phase 3: Signal Dispatcher Architecture](wiki/architecture/03_signal_dispatcher_and_state_machine.md) |
+| [04_builtins_and_env_table.md](wiki/architecture/04_builtins_and_env_table.md) | **[설계 4]** 7대 빌트인 정밀 명세, 단일 빌트인 FD 백업/복원 프로토콜, 환경변수 딕셔너리 및 `envp` 직렬화 | [Phase 4: Builtins & Env Architecture](wiki/architecture/04_builtins_and_env_table.md) |
 
 ---
 

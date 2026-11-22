@@ -16,8 +16,8 @@
 
 - **Process & Roadmap**: [[wiki/process/github_engineering_standards|GitHub Engineering Standards]] | [[wiki/process/roadmap_and_issues|Dual-Repo Roadmap & Issues]]
 - **Requirements**: [[wiki/requirements/mandatory|Mandatory Spec]] | [[wiki/requirements/bonus|Bonus Spec]] | [[wiki/requirements/evaluation_matrix|Evaluation Matrix]]
-- **System Architecture**: [[wiki/architecture/01_parser_and_ast|Phase 1 Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3 Signal Dispatcher]]
-- **Deep Dive Concepts**: [[wiki/concepts/deep_dive_lexer_parser_ast|Compiler Theory]] | [[wiki/concepts/deep_dive_process_ipc_and_fd|Process & IPC]] | [[wiki/concepts/deep_dive_signals_and_concurrency|Signals & Concurrency]] | [[wiki/concepts/allowed_functions_matrix|Allowed Functions]]
+- **System Architecture**: [[wiki/architecture/01_parser_and_ast|Phase 1 Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3 Signal Dispatcher]] | [[wiki/architecture/04_builtins_and_env_table|Phase 4 Builtins & Env]]
+- **Deep Dive Concepts**: [[wiki/concepts/deep_dive_lexer_parser_ast|Compiler Theory]] | [[wiki/concepts/deep_dive_process_ipc_and_fd|Process & IPC]] | [[wiki/concepts/deep_dive_signals_and_concurrency|Signals & Concurrency]] | [[wiki/concepts/deep_dive_builtins_and_environment|Builtins & Env]] | [[wiki/concepts/allowed_functions_matrix|Allowed Functions]]
 
 ---
 

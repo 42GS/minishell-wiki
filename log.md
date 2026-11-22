@@ -124,6 +124,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `wiki/process/roadmap_and_issues.md`: 미작성 상태인 `04_builtins_and_env_table.md` 임시 링크를 일반 코드 스팬으로 정규화.
   - `CLAUDE.md`: 이중 백틱 표기 파서 충돌을 방지하기 위해 `백틱 기호(Backtick)`로 교정.
 - **Lint Audit Result**: Unresolved Links **0건**, Forbidden `file:///` **0건**, Orphan Pages **0건**, `index.md` 누락 **0건**, Mermaid/Table/LaTeX 오류 **0건** 달성.
+
+## [2026-11-22] design | Phase 4: 7 Builtins & Environment Variable Engine Architecture & Deep Dive
+- **Context**: `minishell-wiki` Issue #6 해결 — 4단계 내장 명령어(7대 빌트인)와 환경변수 사전 엔진 아키텍처 설계 및 심화 학습 문서화.
+- **Architectural Specifications Added**:
+  - `wiki/architecture/04_builtins_and_env_table.md`: `t_env_node` 연결 리스트 딕셔너리(`value == NULL` vs `""` 구분), `SHLVL`/`OLDPWD` 초기화, `execve`용 `envp` 직렬화 및 해제 계층, 단일 빌트인의 FD 백업/복원 프로토콜, 7대 빌트인(`echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`) 정밀 명세 및 엣지 케이스 설계.
+- **Deep Dive Concepts Added**:
+  - `wiki/concepts/deep_dive_builtins_and_environment.md`: 프로세스 유저 스택 `environ` 레이아웃, 커널 PCB CWD 및 CoW 메모리 격리로 인한 부모 프로세스 실행 필연성, `exit` 8비트 모듈러 마스킹(`status & 0xFF`), C 표준 UB 없는 `LLONG_MAX`/`LLONG_MIN` 사전 컷오프 오버플로 방어 수학, `export` 비파괴적 포인터 배열 정렬 패턴.
+- **Cross-References & Status**: `index.md`, `CLAUDE.md`, `roadmap_and_issues.md`, `mandatory.md`, `evaluation_matrix.md` 상호 연결 완료.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:

@@ -17,11 +17,11 @@ flowchart LR
         W3["#3 Phase 2: Executor/IPC Arch"]
         W4["#4 Phase 3: Signal Arch"]
         W5["#5 GitHub Standards & Infra"]
-        W6["#6 Phase 4: Builtins/Env Arch (NEXT)"]
+        W6["#6 Phase 4: Builtins/Env Arch (Done)"]
     end
 
     subgraph CODE_REPO["Repository: 42GS/minishell"]
-        C1["#23 Infra: Scaffolding & Makefile"]
+        C1["#23 Infra: Scaffolding & Makefile (NEXT)"]
         C2["#24 Test: Compliance Harness"]
         C3["#25 Feat: Lexer DFA Engine"]
         C4["#26 Feat: Recursive Descent AST"]
@@ -40,9 +40,9 @@ flowchart LR
     classDef current fill:#f57f17,stroke:#bc5100,color:#ffffff;
     classDef planned fill:#1565c0,stroke:#0d47a1,color:#ffffff;
 
-    class W1,W2,W3,W4,W5 done;
-    class W6 current;
-    class C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11 planned;
+    class W1,W2,W3,W4,W5,W6 done;
+    class C1 current;
+    class C2,C3,C4,C5,C6,C7,C8,C9,C10,C11 planned;
 ```
 
 ---
@@ -58,7 +58,7 @@ flowchart LR
 | **#3** | `arch` &#124; P0: Critical | [ARCH] Phase 2: Execution Engine, Process Lifecycle & IPC Pipeline Design | M1 | **CLOSED** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md), [deep_dive_process_ipc_and_fd](../concepts/deep_dive_process_ipc_and_fd.md) |
 | **#4** | `arch` &#124; P0: Critical | [ARCH] Phase 3: Asynchronous Signal Dispatcher & 3-State Machine Design | M1 | **CLOSED** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md), [deep_dive_signals_and_concurrency](../concepts/deep_dive_signals_and_concurrency.md) |
 | **#5** | `infra` &#124; P1: High | [INFRA] GitHub Engineering Standards, Issue/PR Templates & CI Specification | M1 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md) |
-| **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **OPEN (Next)** | `04_builtins_and_env_table.md` (작성 예정) |
+| **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **CLOSED** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md), [deep_dive_builtins_and_environment](../concepts/deep_dive_builtins_and_environment.md) |
 
 ---
 
@@ -68,13 +68,13 @@ flowchart LR
 
 | Issue # | Type / Priority | Title | Milestone | Status | Preceding Wiki Architecture |
 | :---: | :--- | :--- | :--- | :---: | :--- |
-| **#23** | `infra` &#124; P1: High | [INFRA] Project Repository Scaffolding, Strict Makefile & Norminette Setup | M1 | **OPEN** | [github_engineering_standards](github_engineering_standards.md) |
+| **#23** | `infra` &#124; P1: High | [INFRA] Project Repository Scaffolding, Strict Makefile & Norminette Setup | M1 | **OPEN (Next)** | [github_engineering_standards](github_engineering_standards.md) |
 | **#24** | `test` &#124; P1: High | [TEST] Automated Test Suite & 42evalhub Compliance Harness Design | M1 | **OPEN** | [evaluation_matrix](../requirements/evaluation_matrix.md) |
 | **#25** | `feat` &#124; P0: Critical | [FEAT] Implement Lexer (DFA) & Tokenizer Engine | M2 | **OPEN** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
 | **#26** | `feat` &#124; P0: Critical | [FEAT] Implement Recursive Descent AST Parser & Syntax Validator | M2 | **OPEN** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
 | **#27** | `feat` &#124; P0: Critical | [FEAT] Implement Pipeline Execution Engine & Strict Pipe-Closing Protocol | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#28** | `feat` &#124; P0: Critical | [FEAT] Implement Redirection Engine (<, >, >>, << Heredoc) | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
-| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN** | `04_builtins_and_env_table.md` (작성 예정) |
+| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
 | **#30** | `feat` &#124; P0: Critical | [FEAT] Implement Asynchronous Signal Handling & Terminal termios Control | M4 | **OPEN** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md) |
 | **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
 | **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
@@ -84,11 +84,9 @@ flowchart LR
 
 ## 4. Work Execution Roadmap
 
-1. **위키 설계 마무리 (Wiki Issue #6)**:
-   - `wiki/architecture/04_builtins_and_env_table.md` 작성
-   - `wiki/concepts/deep_dive_builtins_and_environment.md` 작성
-   - 위키 이슈 #6 검증 후 완료(Close)
-2. **코드 리포지토리 구축 및 테스트 셋업 (Code Issue #23, #24)**:
+1. **위키 설계 완료 (Wiki Issue #1 ~ #6)**:
+   - Phase 1~4 아키텍처 및 심화 개념 문서 전수 작성 완료
+2. **코드 리포지토리 구축 및 테스트 셋업 (Code Issue #23, #24 - Next)**:
    - 로컬 `~/Projects/gdtknight/42/minishell` 초기화 및 `42GS/minishell` 연동
    - Makefile, Norminette, GitHub Actions CI 배치
    - 자동화 테스트 슈트 및 42evalhub 규격 하네스 구축
