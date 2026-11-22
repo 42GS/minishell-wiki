@@ -132,6 +132,20 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Deep Dive Concepts Added**:
   - `wiki/concepts/deep_dive_builtins_and_environment.md`: 프로세스 유저 스택 `environ` 레이아웃, 커널 PCB CWD 및 CoW 메모리 격리로 인한 부모 프로세스 실행 필연성, `exit` 8비트 모듈러 마스킹(`status & 0xFF`), C 표준 UB 없는 `LLONG_MAX`/`LLONG_MIN` 사전 컷오프 오버플로 방어 수학, `export` 비파괴적 포인터 배열 정렬 패턴.
 - **Cross-References & Status**: `index.md`, `CLAUDE.md`, `roadmap_and_issues.md`, `mandatory.md`, `evaluation_matrix.md` 상호 연결 완료.
+
+## [2026-11-22] feat | Initialize Code Repository Scaffolding & Automated Test Harness (Code #23, #24)
+- **Context**: 아키텍처 1~4단계 설계 완료에 따라 프로덕션 저장소 `~/Projects/gdtknight/42/minishell` (`42GS/minishell`) 초기 뼈대 및 자동화 테스트 하네스 구축.
+- **Scaffolding Implemented (Code Issue #23 Closed)**:
+  - `.github/`: `ISSUE_TEMPLATE`, `PULL_REQUEST_TEMPLATE.md`, `workflows/ci.yml` (Norminette + Strict Build + No-relink + Unit/E2E + Valgrind) 이식 완료.
+  - `include/`: 6대 모듈 인터페이스 헤더(`minishell.h`, `lexer.h`, `parser.h`, `executor.h`, `builtins.h`, `signals.h`) 및 단일 전역 변수(`g_signal_num`) 선언.
+  - `libft/` & `src/`: 42 Norm 준수 핵심 `libft` 11개 모듈 및 6개 서브시스템 스텁 구현.
+  - `Makefile`: macOS Homebrew Readline 자동 탐지 및 Linux 호환, No-relink 완벽 준수 (`.gitignore` 내 전역 ignore 오버라이드 포함).
+- **Test Harness Implemented (Code Issue #24 Closed)**:
+  - `tests/unit/test_libft.c` & `run_unit.sh`: C 단위 테스트 러너 구축.
+  - `tests/e2e/run_e2e.py` & `suites/01~05.json`: Bash vs Minishell 1:1 비교 E2E 하네스(42evalhub 21개 항목 커버) 및 `tests/readline.supp` 구축.
+- **Verification**:
+  - macOS 로컬 `make re`, No-relink, `run_unit.sh`, `run_e2e.py --ci`, `leaks -atExit` (**0 leaks**) 통과.
+  - GitHub Actions CI (`aff5538`) **Norminette + Build + Relink + Unit/E2E + Valgrind 전체 Green 통과** 확인.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
