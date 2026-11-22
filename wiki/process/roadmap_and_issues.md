@@ -58,7 +58,7 @@ flowchart LR
 | **#3** | `arch` &#124; P0: Critical | [ARCH] Phase 2: Execution Engine, Process Lifecycle & IPC Pipeline Design | M1 | **CLOSED** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md), [deep_dive_process_ipc_and_fd](../concepts/deep_dive_process_ipc_and_fd.md) |
 | **#4** | `arch` &#124; P0: Critical | [ARCH] Phase 3: Asynchronous Signal Dispatcher & 3-State Machine Design | M1 | **CLOSED** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md), [deep_dive_signals_and_concurrency](../concepts/deep_dive_signals_and_concurrency.md) |
 | **#5** | `infra` &#124; P1: High | [INFRA] GitHub Engineering Standards, Issue/PR Templates & CI Specification | M1 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md) |
-| **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **OPEN (Next)** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) (작성 예정) |
+| **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **OPEN (Next)** | `04_builtins_and_env_table.md` (작성 예정) |
 
 ---
 
@@ -74,7 +74,7 @@ flowchart LR
 | **#26** | `feat` &#124; P0: Critical | [FEAT] Implement Recursive Descent AST Parser & Syntax Validator | M2 | **OPEN** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
 | **#27** | `feat` &#124; P0: Critical | [FEAT] Implement Pipeline Execution Engine & Strict Pipe-Closing Protocol | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#28** | `feat` &#124; P0: Critical | [FEAT] Implement Redirection Engine (<, >, >>, << Heredoc) | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
-| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) (예정) |
+| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN** | `04_builtins_and_env_table.md` (작성 예정) |
 | **#30** | `feat` &#124; P0: Critical | [FEAT] Implement Asynchronous Signal Handling & Terminal termios Control | M4 | **OPEN** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md) |
 | **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
 | **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **OPEN** | [bonus](../requirements/bonus.md) |

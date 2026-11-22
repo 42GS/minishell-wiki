@@ -115,6 +115,15 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - **Section 1.3 신설**: 이중 저장소 분리 원칙(Dual-Repository Isolation), 커밋 타이틀 `[#이슈번호]` 연결 규칙, `gh` CLI `--body-file`/`shell=False` 스크립트 안전 수칙 명문화.
   - **Section 2 현행화**: 실제 디렉토리 구조(`wiki/process/`, `templates/github/` 등) 반영 및 예정 디렉토리 구분.
   - **Section 4 전면 개정**: 구버전 `file:///` 링크 규정을 폐기하고 **Obsidian 네이티브 위키링크**, **테이블 파이프(`&#124;`) 보호**, **LaTeX 수식(`&#36;`) 충돌 방지**, **Mermaid 문법 무결성** 규정을 단일 진실 공급원(Schema)으로 승격.
+
+## [2026-11-22] lint | Comprehensive Wiki Health Audit & Stale Reference Fix
+- **Context**: Phase 4 착수 전 전체 위키의 고아 페이지, 미해결 링크, 문서 간 모순, 구버전 정보 전수 감사(Operations Protocol 3.3).
+- **Issues Detected & Fixed**:
+  - `wiki/requirements/mandatory.md`: 존재하지 않는 `[[raw/specs/bash_man]]` 링크를 실제 스펙 문서(`bash_quoting`, `bash_expansions_and_wildcards`, `bash_builtins`) 링크로 수정.
+  - `wiki/process/github_engineering_standards.md`: 단일 리포지토리 표기를 듀얼 리포지토리(`minishell` + `minishell-wiki`)로 갱신하고 커밋 메시지 포맷(`[#<issue>]`) 및 라벨 체계를 현행화.
+  - `wiki/process/roadmap_and_issues.md`: 미작성 상태인 `04_builtins_and_env_table.md` 임시 링크를 일반 코드 스팬으로 정규화.
+  - `CLAUDE.md`: 이중 백틱 표기 파서 충돌을 방지하기 위해 `백틱 기호(Backtick)`로 교정.
+- **Lint Audit Result**: Unresolved Links **0건**, Forbidden `file:///` **0건**, Orphan Pages **0건**, `index.md` 누락 **0건**, Mermaid/Table/LaTeX 오류 **0건** 달성.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:

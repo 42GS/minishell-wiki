@@ -2,7 +2,7 @@
 
 > **Navigation**: [[index|Hub: Index]] | [[wiki/requirements/bonus|Bonus Spec]] | [[wiki/requirements/evaluation_matrix|Evaluation Matrix]]  
 > **Architecture Mappings**: [[wiki/architecture/01_parser_and_ast|Phase 1: Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2: Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3: Signal Dispatcher]]  
-> **Source**: [[raw/subject/en.subject|en.subject.md]] (v7.1) | **Reference**: [[raw/specs/bash_man|Bash Reference Manual]]  
+> **Source**: [[raw/subject/en.subject|en.subject.md]] (v7.1) | **Reference**: [[raw/specs/bash_quoting|Quoting]], [[raw/specs/bash_expansions_and_wildcards|Expansions]], [[raw/specs/bash_builtins|Builtins]]  
 > **Status**: Ingested & Verified
 
 ---

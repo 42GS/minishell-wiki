@@ -1,7 +1,7 @@
 # GitHub Engineering Standards & Portfolio Strategy
 
-> **Navigation**: [[index|Hub: Index]] | [[CLAUDE|Schema & Rules]]  
-> **Target Repository**: `git@github.com:42GS/minishell.git`  
+> **Navigation**: [[index|Hub: Index]] | [[CLAUDE|Schema & Rules]] | [[wiki/process/roadmap_and_issues|Dual-Repo Roadmap]]  
+> **Code Repository**: `git@github.com:42GS/minishell.git` | **Wiki Repository**: `git@github.com:42GS/minishell-wiki.git`  
 > **Templates**: `templates/github/` (Issue/PR Templates, CI Workflow)  
 > **Purpose**: 단순한 과제 제출용 리포지토리를 넘어, 테크 기업 백엔드/시스템 소프트웨어 엔지니어 채용 관점에서 기술적 깊이와 협업 역량을 증명하는 레퍼런스 포트폴리오 구축 전략.
 
@@ -70,7 +70,7 @@ gitGraph
 
 ### 3.1 커밋 메시지 포맷
 ```text
-<type>(<scope>): <subject>
+[#<issue>] <type>(<scope>): <subject>
 
 [optional body: Why this change was made, technical details]
 
@@ -84,19 +84,19 @@ gitGraph
 | `fix` | 버그 및 결함 수정 | `leak`, `heredoc`, `exit-code`, `quote`, `signal-race` |
 | `refactor` | 기능 변경 없는 코드 구조 개선 | `cleanup`, `norm`, `fd-table`, `ast-walker` |
 | `test` | 테스트 케이스 및 하네스 추가/수정 | `unit`, `e2e`, `eval`, `fuzz` |
-| `docs` | README 및 문서 추가/수정 | `readme`, `adr`, `architecture` |
+| `docs` | README 및 문서 추가/수정 | `readme`, `adr`, `architecture`, `schema` |
 | `ci` | GitHub Actions 워크플로우 수정 | `actions`, `lint`, `valgrind` |
 | `chore` | 빌드 스크립트, Makefile 수정 | `makefile`, `gitignore` |
 
 ### 3.3 우수한 커밋 메시지 예시
 ```text
-feat(executor): implement multi-command pipeline execution engine
+[#27] feat(executor): implement multi-command pipeline execution engine
 
 - Resolve command list from AST and allocate (N - 1) pipes
 - Implement strict pipe-closing protocol in child and parent to prevent hangs
 - Wait for all children and propagate the rightmost command exit status to $?
 
-Closes #18
+Closes #27
 ```
 
 ---
@@ -114,8 +114,8 @@ Closes #18
 
 ### 4.2 라벨 체계 (Issue & PR Labels)
 - **우선순위**: `P0: Critical`, `P1: High`, `P2: Normal`
-- **영역(Scope)**: `area:parser`, `area:executor`, `area:signals`, `area:builtins`, `area:bonus`
-- **유형(Type)**: `type:feature`, `type:bug`, `type:refactor`, `type:docs`, `type:test`
+- **영역(Scope)**: `area:infra`, `area:parser`, `area:executor`, `area:signals`, `area:builtins`, `area:bonus`
+- **유형(Type)**: `type:architecture`, `type:concept`, `type:feature`, `type:bug`, `type:refactor`, `type:docs`, `type:test`, `type:lint`
 - **안정성(Safety)**: `safety:memory-leak`, `safety:fd-leak`, `safety:norminette`
 
 ---
