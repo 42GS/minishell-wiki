@@ -158,6 +158,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Updates Applied**:
   - `42GS/minishell-wiki`: `scripts/lint_wiki.py` 및 `.github/workflows/wiki-lint.yml` 추가 (PR/Push 시 위키링크, 고아 페이지, 색인 누락, 테이블, 수식, Mermaid 자동 검증).
   - `42GS/minishell`: `.github/workflows/ci.yml` 및 `tests/unit/run_unit.sh` 강화 (`make all`/`bonus` 각각의 No-relink 검사, `fclean`/`re` 잔여물 검사, Unit Test Valgrind 검증, `--errors-for-leak-kinds=all` 적용).
+
+## [2026-11-22] impl | Complete Code Issue #25: Lexer DFA & Tokenizer Engine (PR #35)
+- **Context**: `42GS/minishell` `feat/25-lexer-dfa` 브랜치에서 1단계 DFA 어휘 분석기 구현 및 PR 머지 완료.
+- **Implementation Summary**:
+  - `src/lexer/`: `lexer.c`, `lexer_word.c`, `lexer_op.c`, `lexer_token.c` 4개 모듈로 Norminette 엄격 분리 구현.
+  - 따옴표(`'`, `"`) 내부 공백·메타문자 보존, `t_token->quoted` 비트마스크(`QUOTE_SINGLE`/`QUOTE_DOUBLE`), 1·2글자 연산자 분리, 단독 `&` 예외, 닫히지 않은 따옴표 감지 시 릭 프리 해제(`err=2`).
+  - `tests/unit/test_lexer.c` 단위 테스트 작성 및 macOS `leaks` / Linux CI Valgrind 0바이트 릭 통과.
+- **PR & Roadmap Sync**: `42GS/minishell#35` CI 통과(`Norminette Check` + `Strict Build & Leak Verification`) 후 머지 완료 (`46cfea6`), `Issue #25` 자동 종료. `roadmap_and_issues.md` 갱신.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
