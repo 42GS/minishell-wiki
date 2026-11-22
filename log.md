@@ -93,3 +93,32 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `templates/github/PULL_REQUEST_TEMPLATE.md`: 설계 의도(Why), 트레이드오프, Valgrind/FD 릭 제로 체크리스트 중심 PR 템플릿.
   - `templates/github/workflows/ci.yml`: Ubuntu 환경 Norminette, 엄격 빌드(-Wall -Wextra -Werror), No-relink 검사, Valgrind 메모리 릭 검증 자동화 파이프라인.
 - **Index & Graph Updated**: `index.md`에 프로세스 섹션 추가 및 216개 상호 연결선 유지.
+
+## [2026-11-22] feat | Register 17 Standard GitHub Issues & Milestone Roadmap
+- **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
+- **Remote Issues Created on `42GS/minishell`**:
+  - **M1 (Architecture & Foundation)**:
+    - #1: `[FEAT] Knowledge Base & LLM Wiki Bootstrap` (Closed)
+    - #2: `[ARCH] Phase 1: Lexer, Parser & AST Architecture Design` (Closed)
+    - #3: `[ARCH] Phase 2: Execution Engine & IPC Pipeline Design` (Closed)
+    - #4: `[ARCH] Phase 3: Asynchronous Signal Dispatcher Design` (Closed)
+    - #5: `[INFRA] GitHub Engineering Infrastructure & Standards` (Closed)
+    - #6: `[ARCH] Phase 4: 7 Builtin Utilities & Environment Variable Engine Design` (Open - Next)
+    - #7: `[INFRA] Project Repository Initialization, Norminette CI, and Makefile Scaffolding` (Open)
+    - #8: `[TEST] Automated Test Suite Setup (FIRST Principles, AAA Pattern, Leak Detector)` (Open)
+  - **M2 (Lexer & Parser)**:
+    - #9: `[FEAT] Implement Lexer & Tokenizer DFA Engine` (Open)
+    - #10: `[FEAT] Implement Recursive Descent Parser & AST Builder` (Open)
+  - **M3 (Execution Engine & IPC)**:
+    - #11: `[FEAT] Implement Pipeline Execution & Multi-Process Concurrency` (Open)
+    - #12: `[FEAT] Implement Redirection & Heredoc Engine` (Open)
+  - **M4 (Builtins & Signals)**:
+    - #13: `[FEAT] Implement 7 Builtin Utilities & Environment Table` (Open)
+    - #14: `[FEAT] Implement Asynchronous Signal Dispatcher & State Machine` (Open)
+  - **M5 (Bonus & Full QA Hardening)**:
+    - #15: `[BONUS] Implement Logical Operators (&&, ||) & Subshell ( )` (Open)
+    - #16: `[BONUS] Implement Wildcard Expansion (*) via opendir/readdir` (Open)
+    - #17: `[QA] Full Memory Leak (Valgrind) & FD Leak Automated Verification` (Open)
+- **Artifacts Added**:
+  - `wiki/process/roadmap_and_issues.md`: 마일스톤 개요, 17개 이슈 1:1 위키 매핑 테이블, Mermaid 순서도, 다음 단계 액션 아이템 명시.
+- **Index Updated**: `index.md`에 `roadmap_and_issues.md` 등록.

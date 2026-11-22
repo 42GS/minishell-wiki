@@ -19,6 +19,7 @@
 | 문서 | 설명 | 위키 링크 |
 | :--- | :--- | :--- |
 | [github_engineering_standards.md](wiki/process/github_engineering_standards.md) | **[포트폴리오 전략]** GitHub Flow, Conventional Commits, 마일스톤/라벨, Issue/PR 템플릿, CI 자동화 파이프라인 | [GitHub Engineering Standards](wiki/process/github_engineering_standards.md) |
+| [roadmap_and_issues.md](wiki/process/roadmap_and_issues.md) | **[로드맵 & 이슈]** 42GS/minishell 17개 GitHub 이슈 및 마일스톤(M1~M5) 추적 매핑 테이블 | [Roadmap & Issues](wiki/process/roadmap_and_issues.md) |
 
 ---
 
