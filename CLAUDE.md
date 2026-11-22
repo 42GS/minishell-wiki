@@ -35,12 +35,15 @@
   4. **Leak-Free Resource Management**: 단 하나의 힙 메모리 릭, 단 하나의 파일 디스크립터(FD) 누수도 허용하지 않는 엄격한 RAII 스타일 리소스 클린업.
   5. **Traceable Git Workflow**: Conventional Commits, 이슈 연동 커밋 접두어(`[#이슈번호]`), 명확한 이슈/PR 분기, 아키텍처 결정 기록(ADR) 문서화.
 
-### 1.3 Dual-Repository Isolation & Git Workflow (이중 저장소 분리 원칙)
+### 1.3 Dual-Repository Isolation & Git Workflow (이중 저장소 분리 및 PR 원칙)
 - **역할 엄격 분리**:
   - `42GS/minishell-wiki`: 요구사항 분석, OS/컴파일러 이론 딥다이브, 아키텍처 설계, 엔지니어링 표준 및 회고록 관리. **위키 전용 이슈**만 등록 및 추적한다.
   - `42GS/minishell`: C 언어 프로덕션 코드, Makefile, CI 워크플로우, 자동화 테스트 슈트 관리. **구현 및 QA 전용 이슈**만 등록 및 추적한다.
+- **GitHub Flow & PR-Only 브랜치 전략 (`main` 직접 작업 금지)**:
+  - 모든 개별 이슈 작업은 `main` 브랜치에서 직접 커밋·푸시하지 않고, 반드시 이슈 번호 기반 작업 브랜치(`feat/<issue>-<desc>`, `fix/<issue>-<desc>`, `docs/<issue>-<desc>`)를 분기하여 진행한다.
+  - 작업 완료 후 표준 PR 템플릿에 맞춰 Pull Request를 작성하고, CI 품질 게이트(Norminette, Strict Build, Relink, Valgrind) 통과 후 `main`으로 머지한다.
 - **이슈 연동 커밋 규칙**:
-  - 모든 커밋 타이틀 맨 앞에 해당 리포지토리의 연관 이슈 번호를 `[#이슈번호]` 형태로 명시하여 추적성을 보장한다. (예: `[#5] feat(process): ...`)
+  - 모든 커밋 타이틀 맨 앞에 해당 리포지토리의 연관 이슈 번호를 `[#이슈번호]` 형태로 명시하여 추적성을 보장한다. (예: `[#25] feat(lexer): ...`)
   - 위키 저장소의 커밋은 반드시 `minishell-wiki`의 이슈 번호와 연결하고, 구현 저장소의 커밋은 반드시 `minishell`의 이슈 번호와 연결한다.
 - **CLI 스크립트 안전 수칙**:
   - `gh` CLI 등으로 마크다운 본문을 자동 등록/수정할 때는 백틱 기호(Backtick) 명령어 치환 및 셸 변수 오염을 방지하기 위해 `shell=False` 인자 리스트와 `--body-file` 옵션을 반드시 사용한다.
