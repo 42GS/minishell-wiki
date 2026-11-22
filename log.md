@@ -190,6 +190,15 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `src/env/`: `env_core.c`, `env_array.c` (`envp` 연결 리스트 복제, 조회, 직렬화 계층 연동).
   - `src/main.c` & `shell_utils.c`: REPL 파이프라인 연결 및 비대화형 stdin 지원, `t_shell->line` 추적으로 자식 프로세스 실패(`127`/`126`) 시에도 Valgrind `still reachable` 0바이트 달성.
 - **PR & Roadmap Sync**: `42GS/minishell#37` CI 통과(`Norminette Check` + `Strict Build & Leak Verification`) 후 머지 완료, `Issue #27` 자동 종료. `roadmap_and_issues.md` 갱신.
+
+## [2026-11-22] impl | Complete Code Issue #28: Redirections, Heredoc & Expander Engine (PR #38)
+- **Context**: `42GS/minishell` `feat/28-redirection-heredoc` 브랜치에서 `<`, `>`, `>>`, 사전 수집 방식의 Here-doc(`<<`) 및 단어 확장·따옴표 제거 계층 구현, PR 머지 완료 (M3 달성).
+- **Implementation Summary**:
+  - `src/executor/executor_redir.c`: 좌->우 리다이렉션 순차 적용(`O_RDONLY`, `O_TRUNC`, `O_APPEND` 0644), 실패 시 즉시 중단, `heredoc_fd` 연결 및 닫기.
+  - `src/executor/executor_heredoc.c`: 파싱 직후 AST 사전 수집(`collect_heredocs`), `/tmp/.minishell_hd_*` `open`+즉시 `unlink`로 파이프 버퍼 데드락 및 잔여 파일 제거, `SIGINT` 중단(`130`) 지원.
+  - `src/expander/expander.c` & `expander_utils.c`: 따옴표 상태 기반 환경변수 및 종료 상태(`&#36;VAR`, `&#36;?`) 확장, Quote Removal, Here-doc 본문 따옴표 보존 변수 확장, `t_ast_node->is_expanded` 이중 확장 방지.
+  - `tests/unit/test_redir.c` 및 `run_e2e.py --ci` (8종 Bash 1:1 비교) PASS, Valgrind 0바이트/0 FD 누수.
+- **PR & Roadmap Sync**: `42GS/minishell#38` CI 통과 후 머지 완료, `Issue #28` 자동 종료 (M3 완료 -> M4 진입).
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
