@@ -24,15 +24,24 @@
 
 ---
 
-## 3. Core Concepts & System Architecture (시스템 개념 및 기술 명세)
+## 3. Core Concepts & Deep Dive (핵심 이론 및 심화 학습)
 
 | 문서 | 설명 | 경로 |
 | :--- | :--- | :--- |
+| [wiki/concepts/deep_dive_lexer_parser_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_lexer_parser_ast.md) | **[심화]** 왜 단순 split은 실패하는가? 오토마타(DFA), 문맥 자유 문법(CFG), 재귀 하향 파싱 및 확장 타이밍 논리 | [deep_dive_lexer_parser_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_lexer_parser_ast.md) |
 | [wiki/concepts/allowed_functions_matrix.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/allowed_functions_matrix.md) | 허용 외부 함수 53종 전수 분석, Async-Signal-Safe 판정 및 FD/메모리 주의점 | [allowed_functions_matrix.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/allowed_functions_matrix.md) |
 
 ---
 
-## 4. Raw Sources Registry (불변 원문 소스 보관소)
+## 4. System Architecture Specifications (시스템 아키텍처 상세 설계)
+
+| 문서 | 설명 | 경로 |
+| :--- | :--- | :--- |
+| [wiki/architecture/01_parser_and_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/01_parser_and_ast.md) | **[설계 1]** Lexer/Tokenizer DFA 규칙, EBNF 정형 문법, C 언어 AST 데이터 구조체 및 재귀 하향 파서 | [01_parser_and_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/01_parser_and_ast.md) |
+
+---
+
+## 5. Raw Sources Registry (불변 원문 소스 보관소)
 
 | 분류 | 소스 명 | 설명 | 경로 |
 | :--- | :--- | :--- | :--- |

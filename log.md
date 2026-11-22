@@ -20,3 +20,11 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `wiki/concepts/allowed_functions_matrix.md`: 53종 허용 함수 시그널 안전성 및 리소스 누수 위험도 매트릭스 작성.
 - **Constraints Recorded**:
   - `minishell-old.git` 구버전 코드는 현재 설계/구현 단계에서 절대 참조하지 않음. 최종 완성 후 정량적/정성적 비교 회고 시에만 활용.
+
+## [2026-11-22] design | Phase 1: Lexer, Parser & AST Architecture Design & Deep Dive
+- **Context**: 1단계 문법 및 파서 아키텍처 설계와 사용자 학습을 위한 이론적 심화 개념 문서화.
+- **Architectural Specifications Added**:
+  - `wiki/architecture/01_parser_and_ast.md`: 어휘 분석 파이프라인, EBNF 정형 문법, C 구조체(`t_token`, `t_redir`, `t_ast_node`), 재귀 하향 파서 알고리즘, 구문 에러 규칙 및 트리 메모리 재귀 해제 전략.
+- **Deep Dive Concepts Added**:
+  - `wiki/concepts/deep_dive_lexer_parser_ast.md`: 왜 `ft_split`은 실패하는가, DFA 상태 머신 다이어그램, 촘스키 문법 계층(CFG)과 트리 구조의 필연성, 셔팅야드 vs 재귀 하향 파서 비교, 환경변수 조기 확장의 위험성과 POSIX 3단계 파이프라인.
+- **Index Updated**: `index.md`에 아키텍처 및 딥다이브 섹션 반영.
