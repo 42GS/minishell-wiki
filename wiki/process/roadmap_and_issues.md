@@ -23,8 +23,8 @@ flowchart LR
     subgraph CODE_REPO["Repository: 42GS/minishell"]
         C1["#23 Infra: Scaffolding & Makefile (Done)"]
         C2["#24 Test: Compliance Harness (Done)"]
-        C3["#25 Feat: Lexer DFA Engine (NEXT)"]
-        C4["#26 Feat: Recursive Descent AST"]
+        C3["#25 Feat: Lexer DFA Engine (Done)"]
+        C4["#26 Feat: Recursive Descent AST (NEXT)"]
         C5["#27 Feat: Pipeline & Concurrency"]
         C6["#28 Feat: Redirection & Heredoc"]
         C7["#29 Feat: 7 Builtins & Env"]
@@ -40,9 +40,9 @@ flowchart LR
     classDef current fill:#f57f17,stroke:#bc5100,color:#ffffff;
     classDef planned fill:#1565c0,stroke:#0d47a1,color:#ffffff;
 
-    class W1,W2,W3,W4,W5,W6,C1,C2 done;
-    class C3 current;
-    class C4,C5,C6,C7,C8,C9,C10,C11 planned;
+    class W1,W2,W3,W4,W5,W6,C1,C2,C3 done;
+    class C4 current;
+    class C5,C6,C7,C8,C9,C10,C11 planned;
 ```
 
 ---
@@ -70,8 +70,8 @@ flowchart LR
 | :---: | :--- | :--- | :--- | :---: | :--- |
 | **#23** | `infra` &#124; P1: High | [INFRA] Project Repository Scaffolding, Strict Makefile & Norminette Setup | M1 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md) |
 | **#24** | `test` &#124; P1: High | [TEST] Automated Test Suite & 42evalhub Compliance Harness Design | M1 | **CLOSED** | [evaluation_matrix](../requirements/evaluation_matrix.md) |
-| **#25** | `feat` &#124; P0: Critical | [FEAT] Implement Lexer (DFA) & Tokenizer Engine | M2 | **OPEN (Next)** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
-| **#26** | `feat` &#124; P0: Critical | [FEAT] Implement Recursive Descent AST Parser & Syntax Validator | M2 | **OPEN** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
+| **#25** | `feat` &#124; P0: Critical | [FEAT] Implement Lexer (DFA) & Tokenizer Engine | M2 | **CLOSED** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
+| **#26** | `feat` &#124; P0: Critical | [FEAT] Implement Recursive Descent AST Parser & Syntax Validator | M2 | **OPEN (Next)** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
 | **#27** | `feat` &#124; P0: Critical | [FEAT] Implement Pipeline Execution Engine & Strict Pipe-Closing Protocol | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#28** | `feat` &#124; P0: Critical | [FEAT] Implement Redirection Engine (<, >, >>, << Heredoc) | M3 | **OPEN** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
@@ -90,8 +90,8 @@ flowchart LR
    - 로컬 `~/Projects/gdtknight/42/minishell` 초기화, `.github/` 템플릿/CI 이식, No-relink `Makefile` 및 `libft` 구축 완료
    - 자동화 단위 테스트(`tests/unit/`) 및 42evalhub 비교 E2E 테스트 하네스(`tests/e2e/`) 구축 완료
    - GitHub Actions CI (Norminette + Strict Build + No-relink + Valgrind 0 leaks) Green 통과 확인
-3. **단계별 기능 구현 (Code Issue #25 ~ #33 - Next: #25 Lexer)**:
-   - 토크나이저(#25) -> 파서(#26) -> 실행기/파이프(#27, #28) -> 빌트인/시그널(#29, #30) -> 보너스(#31, #32) -> 최종 릭 제로 검증(#33)
+3. **단계별 기능 구현 (Code Issue #25 ~ #33 - Next: #26 AST Parser)**:
+   - 토크나이저(#25 완료) -> 파서(#26 진행 예정) -> 실행기/파이프(#27, #28) -> 빌트인/시그널(#29, #30) -> 보너스(#31, #32) -> 최종 릭 제로 검증(#33)
 
 ---
 
