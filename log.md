@@ -146,6 +146,12 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Verification**:
   - macOS 로컬 `make re`, No-relink, `run_unit.sh`, `run_e2e.py --ci`, `leaks -atExit` (**0 leaks**) 통과.
   - GitHub Actions CI (`aff5538`) **Norminette + Build + Relink + Unit/E2E + Valgrind 전체 Green 통과** 확인.
+
+## [2026-11-22] process | Enforce PR-Only Git Branch Strategy Across Both Repositories
+- **Context**: `main` 브랜치 직접 커밋·푸시를 금지하고 모든 개별 이슈 단위를 GitHub Flow 브랜치 및 Pull Request(PR)로 관리하도록 엔지니어링 원칙 강화.
+- **Updates Applied**:
+  - `CLAUDE.md` Section 1.3: `GitHub Flow & PR-Only 브랜치 전략` 명문화.
+  - 본 변경사항부터 `docs/5-pr-workflow-policy` 브랜치에서 PR 워크플로우를 적용하여 검증.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
