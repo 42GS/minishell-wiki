@@ -182,6 +182,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - **PR Milestone & Labels**: 기존 누락되어 있던 PR #34~#36(`minishell`) 및 PR #7~#10(`minishell-wiki`)에 마일스톤과 영역·우선순위·안전성 라벨 부여.
   - **Issue Checklist Sync**: 종료된 Issue(#23~#26, Wiki #6) 본문의 완료 조건 체크박스를 `- [x]`로 완료 처리.
   - **`CLAUDE.md` 규칙 추가**: 향후 PR 생성 시 필수 메타데이터 부여 및 이슈 종료 시 체크리스트 동기화 규칙 명문화.
+
+## [2026-11-22] impl | Complete Code Issue #27: Pipeline Execution Engine & Strict Pipe-Closing (PR #37)
+- **Context**: `42GS/minishell` `feat/27-pipeline-executor` 브랜치에서 AST 실행 엔진, 다중 파이프라인 IPC, Strict Pipe-Closing 프로토콜, `$PATH` 탐색기 구현 및 PR 머지 완료.
+- **Implementation Summary**:
+  - `src/executor/`: `executor.c` (AST 디스패처), `executor_pipe.c` & `executor_pipe_child.c` (`(N-1)` 파이프 생성/병렬 포크/Strict Pipe-Closing/`wait_pipeline`), `executor_path.c` (`stat`/`access` 기반 `126`/`127` 및 `$PATH` 탐색), `executor_redir_stub.c`.
+  - `src/env/`: `env_core.c`, `env_array.c` (`envp` 연결 리스트 복제, 조회, 직렬화 계층 연동).
+  - `src/main.c` & `shell_utils.c`: REPL 파이프라인 연결 및 비대화형 stdin 지원, `t_shell->line` 추적으로 자식 프로세스 실패(`127`/`126`) 시에도 Valgrind `still reachable` 0바이트 달성.
+- **PR & Roadmap Sync**: `42GS/minishell#37` CI 통과(`Norminette Check` + `Strict Build & Leak Verification`) 후 머지 완료, `Issue #27` 자동 종료. `roadmap_and_issues.md` 갱신.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
