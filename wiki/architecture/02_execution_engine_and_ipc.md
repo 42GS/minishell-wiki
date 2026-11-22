@@ -1,14 +1,16 @@
 # Execution Engine & IPC Pipeline Architecture Specification
 
-> **Module**: Execution Engine, Process Lifecycle & IPC Pipeline  
-> **Target**: Mandatory (Pipes, Redirections, Builtins, Execve) + Bonus (`&&`, `||`, Subshells)  
-> **References**: [bash_pipelines.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_pipelines.md), [bash_redirections.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_redirections.md), [bash_lists.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_lists.md), [bash_exit_status.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_exit_status.md)
+> **Navigation**: [[index|Hub: Index]] | [[wiki/architecture/01_parser_and_ast|Prev: Phase 1 Parser & AST]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Next: Phase 3 Signal Dispatcher]]  
+> **Requirements**: [[wiki/requirements/mandatory|Mandatory Spec]] | [[wiki/requirements/bonus|Bonus Spec]]  
+> **Deep Dive Concept**: [[wiki/concepts/deep_dive_process_ipc_and_fd|Process Lifecycle, FD Table & Deadlock Deep Dive]]  
+> **Allowed Functions**: [[wiki/concepts/allowed_functions_matrix|Allowed Functions Matrix]]  
+> **Raw Specs**: [[raw/specs/bash_pipelines|Bash Pipelines]] | [[raw/specs/bash_redirections|Bash Redirections]] | [[raw/specs/bash_exit_status|Bash Exit Status]]
 
 ---
 
 ## 1. Engine Architecture & Node Dispatcher
 
-실행 엔진은 파서가 완성한 AST의 루트 노드를 인자로 받아 트리를 재귀 순회(Recursive Traversal)하며 노드 타입에 따라 적절한 실행 전략으로 디스패치한다.
+실행 엔진은 파서([[wiki/architecture/01_parser_and_ast|01_parser_and_ast.md]])가 완성한 AST의 루트 노드를 인자로 받아 트리를 재귀 순회(Recursive Traversal)하며 노드 타입에 따라 적절한 실행 전략으로 디스패치한다.
 
 ```mermaid
 graph TD
@@ -52,7 +54,7 @@ flowchart TD
 
 > [!IMPORTANT]
 > **부모 셸에서 빌트인을 실행할 때의 FD 보존 원칙**:  
-> `cd`, `export`, `unset`, `exit` 등 부모 셸의 상태를 변경해야 하는 빌트인이 리다이렉션과 함께 호출될 때(예: `export TEST=1 > out.txt`), 부모의 `stdin(0)`과 `stdout(1)`이 영구적으로 손상되지 않도록 **반드시 `dup`으로 원본 FD를 백업하고 실행 후 `dup2`로 원복**해야 합니다.
+> `cd`, `export`, `unset`, `exit` 등 부모 셸의 상태를 변경해야 하는 빌트인이 리다이렉션과 함께 호출될 때(예: `export TEST=1 > out.txt`), 부모의 `stdin(0)`과 `stdout(1)`이 영구적으로 손상되지 않도록 **반드시 `dup`으로 원본 FD를 백업하고 실행 후 `dup2`로 원복**해야 합니다. (이론: [[wiki/concepts/deep_dive_process_ipc_and_fd|FD 테이블 3단계 구조]])
 
 ---
 
@@ -79,14 +81,14 @@ graph TD
 
 ### 3.2 Pipe End 관리 및 FD 생명주기 (Strict Closing Protocol)
 
-파이프라인에서 가장 흔하게 발생하는 **무한 행(Hang)** 결함은 사용하지 않는 파이프의 쓰기 끝(`write-end`)을 프로세스 어딘가에서 열어두었을 때 발생합니다.
+파이프라인에서 가장 흔하게 발생하는 **무한 행(Hang)** 결함은 사용하지 않는 파이프의 쓰기 끝(`write-end`)을 프로세스 어딘가에서 열어두었을 때 발생합니다. (수학적 증명: [[wiki/concepts/deep_dive_process_ipc_and_fd|파이프라인 무한 행의 원인과 EOF 도달 조건]])
 
 ```
 [Command 1] -- pipe_fd[0][1] --> | === Pipe 0 === | -- pipe_fd[0][0] --> [Command 2]
 ```
 
 1. **파이프 생성**:
-   - $N$개의 명령어를 위해 $N-1$개의 `pipe(pipe_fd[i])`를 부모에서 미리 생성.
+   - $N$개의 명령어를 위해 $N-1$개의 `pipe(pipe_fd[i])`를 부모에서 미리 생성. ([[wiki/concepts/allowed_functions_matrix|pipe 시스템 콜]])
 2. **자식 프로세스 ($i$번째 프로세스, $0 \le i < N$) 내부**:
    - **입력 연결**: $i > 0$이면 `dup2(pipe_fd[i-1][0], STDIN_FILENO)` 연결.
    - **출력 연결**: $i < N - 1$이면 `dup2(pipe_fd[i][1], STDOUT_FILENO)` 연결.
@@ -125,14 +127,14 @@ graph LR
    - `fd = open(target, O_WRONLY | O_CREAT | O_APPEND, 0644)`
    - 성공 시: `dup2(fd, STDOUT_FILENO)`, `close(fd)`.
 4. **`REDIR_HEREDOC` (`<< delimiter`)**:
-   - **파싱 직후/실행 전 단계**에서 임시 파이프 또는 임시 파일에 사용자의 Here-doc 입력을 미리 수집 완료해 둠.
+   - **파싱 직후/실행 전 단계**에서 임시 파이프 또는 임시 파일에 사용자의 Here-doc 입력을 미리 수집 완료해 둠. ([[wiki/architecture/03_signal_dispatcher_and_state_machine|Here-doc 시그널 처리 연동]])
    - 실행 단계에서는 열려있는 `heredoc_fd`를 단순히 `dup2(heredoc_fd, STDIN_FILENO)`로 연결하고 `close(heredoc_fd)`.
 
 ---
 
 ## 5. Exit Status Normalization & Wait Protocol
 
-모든 자식 프로세스가 포크된 후, 부모 프로세스는 모든 자식을 수거해야 좀비(Zombie) 프로세스를 방지할 수 있습니다.
+모든 자식 프로세스가 포크된 후, 부모 프로세스는 모든 자식을 수거해야 좀비(Zombie) 프로세스를 방지할 수 있습니다. (이론: [[wiki/concepts/deep_dive_process_ipc_and_fd|좀비 방지와 Concurrency의 본질]])
 
 ```c
 int wait_pipeline(pid_t *pids, int count)
@@ -160,7 +162,7 @@ int wait_pipeline(pid_t *pids, int count)
 }
 ```
 
-### 상태 코드 정규화 규칙
+### 상태 코드 정규화 규칙 (연계: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 상태 동기화]])
 - **정상 종료 (`WIFEXITED`)**: 프로세스가 `exit(code)`로 종료한 값 (0~255).
 - **시그널 종료 (`WIFSIGNALED`)**: 프로세스가 처리되지 않은 시그널에 의해 강제 종료된 경우:
   - `SIGINT` (Ctrl+C, 시그널 2) -> $128 + 2 = \mathbf{130}$

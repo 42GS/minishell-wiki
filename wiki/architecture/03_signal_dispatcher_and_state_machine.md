@@ -1,14 +1,16 @@
 # Signal Dispatcher & State Machine Architecture Specification
 
-> **Module**: Signal Handling, State Machine & Terminal Attributes Control  
-> **Target**: Mandatory (Ctrl+C, Ctrl+D, Ctrl+\ in interactive & non-interactive) + Here-doc Signal  
-> **References**: [bash_signals.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_signals.md), [allowed_functions_matrix.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/allowed_functions_matrix.md)
+> **Navigation**: [[index|Hub: Index]] | [[wiki/architecture/02_execution_engine_and_ipc|Prev: Phase 2 Execution Engine]]  
+> **Requirements**: [[wiki/requirements/mandatory|Mandatory Spec (Global Variable Restriction)]]  
+> **Deep Dive Concept**: [[wiki/concepts/deep_dive_signals_and_concurrency|Signals, Reentrancy & Process Groups Deep Dive]]  
+> **Allowed Functions**: [[wiki/concepts/allowed_functions_matrix|Allowed Functions Matrix]]  
+> **Raw Specs**: [[raw/specs/bash_signals|Bash Signals Spec]]
 
 ---
 
 ## 1. Architectural Philosophy & Global Variable Isolation
 
-42 Minishell 서브젝트는 시그널 처리에 대해 매우 강력하고 엄격한 제약을 부여합니다:
+42 Minishell 서브젝트([[wiki/requirements/mandatory|Mandatory Spec]])는 시그널 처리에 대해 매우 강력하고 엄격한 제약을 부여합니다:
 
 > [!CAUTION]
 > **"Avoid using more than one global variable to indicate a received signal... This global variable cannot provide any other information or data access than the number of a received signal."**
@@ -18,7 +20,7 @@
 /* 전역 변수는 오직 수신된 시그널 번호(int)만을 원자적으로 기록 */
 volatile sig_atomic_t g_signal_num = 0;
 ```
-그 어떤 데이터 구조체 포인터(`t_shell*`), 셸 상태값, 카운터도 전역 변수에 포함하지 않으며, 메인 루프와 실행 엔진이 `g_signal_num`의 값을 감지하고 소비(Consume)하여 셸의 내부 상태(`ctx->last_exit_status`)를 갱신합니다.
+그 어떤 데이터 구조체 포인터(`t_shell*`), 셸 상태값, 카운터도 전역 변수에 포함하지 않으며, 메인 루프와 실행 엔진([[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]])이 `g_signal_num`의 값을 감지하고 소비(Consume)하여 셸의 내부 상태(`ctx->last_exit_status`)를 갱신합니다. (이론: [[wiki/concepts/deep_dive_signals_and_concurrency|volatile sig_atomic_t의 하드웨어/컴파일러적 의미]])
 
 ---
 
@@ -49,7 +51,7 @@ stateDiagram-v2
 
 ## 3. Signal Handler Implementation
 
-신뢰성 있는 시그널 처리를 위해 `signal()` 대신 POSIX 표준 `sigaction()`을 사용합니다.
+신뢰성 있는 시그널 처리를 위해 `signal()` 대신 POSIX 표준 `sigaction()`을 사용합니다. (시스템 콜: [[wiki/concepts/allowed_functions_matrix|sigaction 및 시그널 함수]])
 
 ### 3.1 대화형 모드 핸들러 (`setup_interactive_signals`)
 ```c
@@ -80,7 +82,7 @@ void setup_interactive_signals(void)
 ```
 
 ### 3.2 자식 프로세스 실행 모드 핸들러 (`setup_execution_signals`)
-부모가 자식들을 포크한 후 `waitpid` 루프에 들어가기 직전에 설정합니다:
+부모가 자식들을 포크한 후 `waitpid` 루프([[wiki/architecture/02_execution_engine_and_ipc|Phase 2 wait_pipeline]])에 들어가기 직전에 설정합니다:
 ```c
 void setup_parent_execution_signals(void)
 {
@@ -105,6 +107,7 @@ void setup_child_execution_signals(void)
     sigaction(SIGQUIT, &sa, NULL);
 }
 ```
+- 배경 설명: [[wiki/concepts/deep_dive_signals_and_concurrency|포그라운드 프로세스 그룹 시그널 브로드캐스팅 방어 전략]]
 
 ### 3.3 Here-doc 모드 핸들러 (`setup_heredoc_signals`)
 Here-doc 도중 `Ctrl+C`가 눌리면 `g_signal_num = SIGINT`로 세팅하고 `read`를 중단시킵니다.
@@ -132,6 +135,7 @@ void set_terminal_echoctl(int enable)
 ```
 - 셸 시작 시 `set_terminal_echoctl(0)`을 호출하여 터미널 에코 제어 문자를 끄고,
 - 셸 종료 직전에 원래 속성으로 복원합니다.
+- 관련 함수: [[wiki/concepts/allowed_functions_matrix|termios 함수군]]
 
 ---
 
@@ -154,4 +158,4 @@ void sync_signal_status(t_shell_context *ctx)
     }
 }
 ```
-- `readline()` 호출이 끝난 직후 매번 `sync_signal_status(ctx)`를 실행하여, 사용자가 프롬프트에서 `Ctrl+C`를 눌러 새 줄을 띄운 직후 `echo $?`를 실행하면 정확히 **130**이 출력되도록 보장합니다.
+- `readline()` 호출이 끝난 직후 매번 `sync_signal_status(ctx)`를 실행하여, 사용자가 프롬프트에서 `Ctrl+C`를 눌러 새 줄을 띄운 직후 `echo $?`를 실행하면 정확히 **130**이 출력되도록 보장합니다. (평가 검증: [[wiki/requirements/evaluation_matrix|평가 매트릭스 시그널 항목]])

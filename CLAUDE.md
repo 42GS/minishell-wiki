@@ -1,12 +1,21 @@
 # Minishell LLM Wiki Schema & Engineering Guide
 
 > **Project Identity**: 42 Minishell Knowledge Base & System Architecture Wiki  
+> **Hub**: [[index|Minishell LLM Wiki Index]]  
 > **Wiki Location**: `/Users/yong/Projects/gdtknight/42/minishell-wiki`  
 > **Implementation Target**: `~/Projects/gdtknight/42/minishell`  
 > **Remote Repository**: `git@github.com:42GS/minishell.git`  
 > **Legacy Repository (Archive Only)**: `git@github.com:42GS/minishell-old.git`  
-> **Official Evaluation Source**: [42 EvalHub](https://www.42evalhub.com/common/minishell) / `raw/evalhub/minishell_eval_scale.md`  
+> **Official Evaluation Source**: [[raw/evalhub/minishell_eval_scale|42 EvalHub Minishell Scale]]  
 > **Reference Shell**: GNU Bash (`bash --posix` / POSIX.1-2017)
+
+---
+
+## 0. Quick Navigation & Architecture Map
+
+- **Requirements**: [[wiki/requirements/mandatory|Mandatory Spec]] | [[wiki/requirements/bonus|Bonus Spec]] | [[wiki/requirements/evaluation_matrix|Evaluation Matrix]]
+- **System Architecture**: [[wiki/architecture/01_parser_and_ast|Phase 1 Parser & AST]] | [[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]] | [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3 Signal Dispatcher]]
+- **Deep Dive Concepts**: [[wiki/concepts/deep_dive_lexer_parser_ast|Compiler Theory]] | [[wiki/concepts/deep_dive_process_ipc_and_fd|Process & IPC]] | [[wiki/concepts/deep_dive_signals_and_concurrency|Signals & Concurrency]] | [[wiki/concepts/allowed_functions_matrix|Allowed Functions]]
 
 ---
 

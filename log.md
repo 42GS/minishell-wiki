@@ -58,3 +58,16 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - 노드 라벨 내 `->`, `|`, `$?`, `()`, `<>` 특수문자를 안전한 텍스트로 교체.
   - `stateDiagram-v2` 전이 라벨을 표준 영문 식별자로 전면 수정.
   - `comprehensive_lint.py`를 작성하여 위키 전수 검증: 잔여 이슈 0건(Total issues found: 0) 달성.
+
+## [2026-11-22] refactor | Transform All Links to Native Obsidian Wikilinks & Build 250-Edge Knowledge Graph
+- **Context**: Obsidian Graph View에서 모든 노드가 연결선 없는 고아 노드로 표시되던 문제 해결 및 문서 간 지식 네트워크 구축.
+- **Root Cause**: 모든 파일 참조가 외부 URL 형태인 `file:///Users/yong/...` 절대 경로로 작성되어 있어, Obsidian이 이를 로컬 볼트 내부 링크(Internal Link)로 인식하지 않고 외부 링크로 취급함.
+- **Actions Taken**:
+  - `file:///` 절대 경로 링크를 Obsidian 네이티브 위키링크(`[[target|alias]]`)로 전면 마이그레이션.
+  - 모든 요구사항, 아키텍처, 딥다이브 개념, 평가 매트릭스, 허용 함수 및 스펙 원문 간의 2방향 시맨틱 상호 참조(Cross-reference) 네트워크 구축.
+  - 마크다운 테이블 및 인용구 내 이스케이프 파이프(`\|`) 정규화로 미해결(Unresolved) 링크 0건 달성.
+- **Graph Metrics Achieved**:
+  - 총 문서 노드 (Nodes): **24개**
+  - 총 위키링크 연결선 (Edges): **250개** (고아 노드 0개)
+  - 미해결 링크 (Unresolved): **0개**
+  - 핵심 허브 노드: `index.md`, `02_execution_engine_and_ipc.md`(43 백링크), `03_signal_dispatcher_and_state_machine.md`(30 백링크), `01_parser_and_ast.md`(20 백링크).

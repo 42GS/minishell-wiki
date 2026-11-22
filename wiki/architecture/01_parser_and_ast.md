@@ -1,14 +1,15 @@
 # Parser & AST Architecture Specification
 
-> **Module**: Lexer, Parser & Abstract Syntax Tree (AST)  
-> **Target**: Mandatory (Pipelines, Redirections) + Bonus (`&&`, `||`, Subshell `( )`)  
-> **References**: [bash_quoting.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_quoting.md), [bash_pipelines.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_pipelines.md), [bash_lists.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_lists.md), [bash_compound_commands.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/raw/specs/bash_compound_commands.md)
+> **Navigation**: [[index|Hub: Index]] | [[wiki/architecture/02_execution_engine_and_ipc|Next: Phase 2 Execution Engine]]  
+> **Requirements**: [[wiki/requirements/mandatory|Mandatory Requirements]] | [[wiki/requirements/bonus|Bonus Requirements]]  
+> **Deep Dive Concept**: [[wiki/concepts/deep_dive_lexer_parser_ast|Compiler Theory, DFA & AST Deep Dive]]  
+> **Raw Specs**: [[raw/specs/bash_quoting|Bash Quoting]] | [[raw/specs/bash_pipelines|Bash Pipelines]] | [[raw/specs/bash_lists|Bash Lists]] | [[raw/specs/bash_compound_commands|Bash Compound Commands]]
 
 ---
 
 ## 1. Architectural Pipeline Overview
 
-사용자의 원시 입력 라인(`char *line`)은 실행 엔진에 도달하기 전 4단계의 명확한 데이터 변환 파이프라인을 거친다.
+사용자의 원시 입력 라인(`char *line`)은 실행 엔진([[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]])에 도달하기 전 4단계의 명확한 데이터 변환 파이프라인을 거친다.
 
 ```mermaid
 flowchart LR
@@ -20,10 +21,10 @@ flowchart LR
     AST --> Executor["Execution Engine"]
 ```
 
-1. **Lexical Analysis (Lexer/Tokenizer)**: 원시 문자열을 의미 있는 최소 단위인 토큰(`WORD`, `PIPE`, `AND`, `OR`, `LPAREN`, `RPAREN`, `REDIR_*`)으로 분해.
+1. **Lexical Analysis (Lexer/Tokenizer)**: 원시 문자열을 의미 있는 최소 단위인 토큰(`WORD`, `PIPE`, `AND`, `OR`, `LPAREN`, `RPAREN`, `REDIR_*`)으로 분해. (상세 상태 머신: [[wiki/concepts/deep_dive_lexer_parser_ast|DFA 상태 전이도]])
 2. **Syntax Validation**: 문법 규칙에 어긋나는 토큰 배열(예: `echo a | | cat`, `(cmd &&)`) 사전 검증 및 Bash 호환 구문 에러 반환.
 3. **Syntactic Analysis (Parser)**: 연산자 우선순위(Precedence)와 결합 법칙(Associativity)에 따라 토큰 스트림을 계층적 트리 구조(AST)로 조립.
-4. **Tree Traversal (Executor)**: 완성된 AST를 후위/중위 순회하며 조건부 실행 및 IPC 파이프라인 구동.
+4. **Tree Traversal (Executor)**: 완성된 AST를 [[wiki/architecture/02_execution_engine_and_ipc|실행 엔진]]으로 전달하여 후위/중위 순회하며 조건부 실행 및 IPC 파이프라인 구동.
 
 ---
 
@@ -51,12 +52,12 @@ cmd_word         ::= [^ \t\n|<>&()]+  (* with quote support *)
 ```
 
 ### 연산자 우선순위 및 결합성
-| 레벨 | 문법 요소 | 기호 | 결합성 (Associativity) |
-| :---: | :--- | :---: | :---: |
-| **1 (최상위)** | 괄호 서브셸 그룹핑 | `( )` | 괄호 내부 우선 평가 |
-| **2** | 리다이렉션 | `<`, `>`, `>>`, `<<` | 왼쪽에서 오른쪽으로 (Left-to-right) |
-| **3** | 파이프라인 | `\|` | 왼쪽에서 오른쪽으로 (Left-to-right) |
-| **4 (최하위)** | 논리 리스트 | `&&`, `\|\|` | 왼쪽에서 오른쪽으로 (동등 우선순위) |
+| 레벨 | 문법 요소 | 기호 | 결합성 (Associativity) | 관련 명세 |
+| :---: | :--- | :---: | :---: | :--- |
+| **1 (최상위)** | 괄호 서브셸 그룹핑 | `( )` | 괄호 내부 우선 평가 | [[wiki/requirements/bonus|보너스 서브셸]] |
+| **2** | 리다이렉션 | `<`, `>`, `>>`, `<<` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[wiki/requirements/mandatory|필수 리다이렉션]] |
+| **3** | 파이프라인 | `\|` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[raw/specs/bash_pipelines|파이프라인 스펙]] |
+| **4 (최하위)** | 논리 리스트 | `&&`, `\|\|` | 왼쪽에서 오른쪽으로 (동등 우선순위) | [[wiki/requirements/bonus|보너스 논리 연산자]] |
 
 ---
 
@@ -88,7 +89,7 @@ typedef struct s_token {
 ```
 
 ### 3.2 Redirection Node
-리다이렉션은 명령어 실행 전 파일 디스크립터(FD)를 재배치하는 메타데이터이므로, 명령어 노드에 연결 리스트로 첨부된다.
+리다이렉션은 명령어 실행 전 파일 디스크립터(FD)를 재배치하는 메타데이터이므로, 명령어 노드에 연결 리스트로 첨부된다. (실행 상세: [[wiki/architecture/02_execution_engine_and_ipc|리다이렉션 엔진]])
 ```c
 typedef enum e_redir_type {
     REDIR_IN,           /* < */
@@ -176,7 +177,7 @@ graph TD
 
 ## 5. Syntax Error Rules & Bash Compatibility
 
-파싱 도중 문법 오류가 발견되면, 즉시 파싱을 중단하고 트리를 정리한 뒤 Bash 표준 에러 메시지를 출력하고 종료 상태 코드를 `2`로 설정한다.
+파싱 도중 문법 오류가 발견되면, 즉시 파싱을 중단하고 트리를 정리한 뒤 Bash 표준 에러 메시지를 출력하고 종료 상태 코드를 `2`로 설정한다. (평가 검증: [[wiki/requirements/evaluation_matrix|평가 매트릭스 Syntax Error 방어]])
 
 | 상황 | 입력 예시 | Bash 표준 에러 메시지 | 종료 상태 (`$?`) |
 | :--- | :--- | :--- | :---: |
@@ -207,6 +208,6 @@ void free_ast(t_ast_node *node)
     free(node);
 }
 ```
-- **성공 시**: 트리를 순회하여 실행 완료 후 루트 노드에서 `free_ast(root)` 호출.
+- **성공 시**: 트리를 순회하여 [[wiki/architecture/02_execution_engine_and_ipc|실행 완료]] 후 루트 노드에서 `free_ast(root)` 호출.
 - **파싱 실패(Syntax Error) 시**: 파싱 도중 생성된 부분 트리를 즉시 `free_ast(partial_tree)`로 일괄 해제하고 토큰 리스트 해제.
-- **Here-doc 중단 시**: 임시로 열려있는 모든 `heredoc_fd`를 `close`한 후 트리 해제.
+- **Here-doc 중단 시**: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 핸들러]] 개입 시 임시로 열려있는 모든 `heredoc_fd`를 `close`한 후 트리 해제.

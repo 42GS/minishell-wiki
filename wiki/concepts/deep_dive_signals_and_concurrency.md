@@ -1,5 +1,8 @@
 # Deep Dive: 비동기 시그널(Signal), 재진입성(Reentrancy), 그리고 프로세스 그룹 제어
 
+> **Navigation**: [[index|Hub: Index]] | **Architecture**: [[wiki/architecture/03_signal_dispatcher_and_state_machine|Phase 3 Signal Dispatcher Architecture]]  
+> **Related Architecture**: [[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine & Waitpid]]  
+> **Allowed Functions**: [[wiki/concepts/allowed_functions_matrix|Allowed Functions Matrix]]  
 > **Target Audience**: 시스템 프로그래머, 백엔드 및 분산 시스템 엔지니어  
 > **Topic**: 하드웨어 인터럽트에서 소프트웨어 시그널까지의 여정, 비동기 시그널 안전성, Self-Deadlock의 원리
 
@@ -32,7 +35,7 @@ sequenceDiagram
 1. **하드웨어 입력**: 사용자가 키보드로 `Ctrl+C`를 누르면 키보드 컨트롤러가 CPU 인터럽트를 발생시키고, OS의 TTY 드라이버(Line Discipline)로 문자 코드 `0x03`이 전송됩니다.
 2. **인터럽트 문자 감지**: Line Discipline은 `0x03`이 제어 문자 `INTR`임을 인식하고, 터미널의 현재 **포그라운드 프로세스 그룹(Foreground Process Group)** 전체에 `SIGINT` 시그널을 발행하도록 커널에 요청합니다.
 3. **시그널 펜딩(Pending)**: 커널은 해당 프로세스들의 PCB(Task Struct) 내 `sigpending` 비트마스크에 `SIGINT` 비트를 1로 설정합니다.
-4. **시그널 디스패치(Dispatch)**: 프로세스가 커널 모드(시스템 콜 수행 중 등)에서 **유저 모드로 복귀(Return from Trap)하는 바로 그 순간**, 커널이 펜딩된 시그널을 검사하고, 유저 스택 프레임을 변조하여 미리 등록된 **시그널 핸들러 함수로 점프(Trap)**시킵니다.
+4. **시그널 디스패치(Dispatch)**: 프로세스가 커널 모드(시스템 콜 수행 중 등)에서 **유저 모드로 복귀(Return from Trap)하는 바로 그 순간**, 커널이 펜딩된 시그널을 검사하고, 유저 스택 프레임을 변조하여 미리 등록된 **시그널 핸들러 함수로 점프(Trap)**시킵니다. (구현: [[wiki/architecture/03_signal_dispatcher_and_state_machine|sigaction 핸들러]])
 
 ---
 
@@ -59,14 +62,14 @@ sequenceDiagram
 
 ### 2.2 POSIX 비동기 시그널 안전 함수(Async-Signal-Safe Functions)란?
 - 시그널 핸들러가 언제 어떤 코드의 실행 도중에 끼어들더라도(Interleaved execution), 데이터 오염이나 락 경합 없이 **안전하게 완료될 수 있는 함수**를 의미합니다.
-- **특징**: 내부적으로 글로벌 정적 버퍼를 쓰지 않으며, 뮤텍스 락을 잡지 않고, 상태를 가지지 않는 원자적 시스템 콜(`write`, `close`, `dup2`, `sigaction` 등)입니다.
+- **특징**: 내부적으로 글로벌 정적 버퍼를 쓰지 않으며, 뮤텍스 락을 잡지 않고, 상태를 가지지 않는 원자적 시스템 콜(`write`, `close`, `dup2`, `sigaction` 등)입니다. (전수 목록: [[wiki/concepts/allowed_functions_matrix|허용 함수 매트릭스 Safety 판정]])
 - **Minishell의 예외**: 서브젝트에서 허용해 준 `rl_on_new_line`, `rl_replace_line`, `rl_redisplay`는 Readline 라이브러리 함수지만 42 과제의 대화형 프롬프트 시그널 재출력을 위해 특별히 공식 허용된 케이스입니다.
 
 ---
 
 ## 3. `volatile sig_atomic_t`의 하드웨어/컴파일러 관점의 본질
 
-Minishell 전역 변수는 왜 반드시 `volatile sig_atomic_t`로 선언해야 하는가?
+Minishell 전역 변수는 왜 반드시 `volatile sig_atomic_t`로 선언해야 하는가? (아키텍처 규격: [[wiki/architecture/03_signal_dispatcher_and_state_machine|단일 전역 변수 선언]])
 
 ```c
 volatile sig_atomic_t g_signal_num = 0;
@@ -102,7 +105,7 @@ while (g_signal_num == 0) {
 - `sigaction` 등록 시 `sa_flags = SA_RESTART`를 주면:
   - 시스템 콜이 시그널에 의해 중단되어도 커널이 핸들러 실행 후 **해당 시스템 콜을 자동으로 재시작(Restart)**합니다.
 - **Minishell에서의 선택**:
-  - 대화형 셸의 `readline()`이나 `Here-doc` 입력 대기 중에 `Ctrl+C`가 들어왔을 때는 **대기를 즉시 깨고 빠져나와야** 합니다. 따라서 이때는 `SA_RESTART`를 끄거나, Readline의 이벤트 루프 플래그를 정교하게 제어해야 프롬프트 멈춤 현상을 방지할 수 있습니다.
+  - 대화형 셸의 `readline()`이나 `Here-doc` 입력 대기 중에 `Ctrl+C`가 들어왔을 때는 **대기를 즉시 깨고 빠져나와야** 합니다. 따라서 이때는 `SA_RESTART`를 끄거나, Readline의 이벤트 루프 플래그를 정교하게 제어해야 프롬프트 멈춤 현상을 방지할 수 있습니다. (아키텍처: [[wiki/architecture/03_signal_dispatcher_and_state_machine|대화형 시그널 플래그]])
 
 ---
 
@@ -120,7 +123,7 @@ minishell$ cat
 ### 부모 셸의 방어 전략:
 1. 만약 부모 셸도 대화형 핸들러(`handle_sigint_interactive`)를 켜둔 채로 자식을 기다리면:
    - `cat`도 죽고, 부모도 새 프롬프트를 화면에 뿌려버려 **프롬프트가 2중으로 겹치거나 화면이 깨지는 레이스 컨디션**이 발생합니다.
-2. 따라서 부모 셸은 자식을 `fork`한 직후, 자신의 시그널 처리를 `SIG_IGN`(무시)으로 변경하고 오직 `waitpid()`를 통해서만 자식의 종료 상태(`WIFSIGNALED`, `WTERMSIG`)를 관찰해야 합니다.
+2. 따라서 부모 셸은 자식을 `fork`한 직후, 자신의 시그널 처리를 `SIG_IGN`(무시)으로 변경하고 오직 `waitpid()`([[wiki/architecture/02_execution_engine_and_ipc|실행 엔진 wait_pipeline]])를 통해서만 자식의 종료 상태(`WIFSIGNALED`, `WTERMSIG`)를 관찰해야 합니다.
 3. 자식이 시그널로 죽었음이 확인되면 비로소 부모 셸은 개행(`\n`)을 한 번 출력하고 종료 코드를 $128 + 2 = \mathbf{130}$으로 설정한 뒤 대화형 모드로 복귀합니다.
 
-이것이 Bash가 구현하고 있는 완벽한 시그널 제어의 표준 아키텍처입니다.
+이것이 Bash([[raw/specs/bash_signals|Bash Signals Spec]])가 구현하고 있는 완벽한 시그널 제어의 표준 아키텍처입니다.
