@@ -36,3 +36,11 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Deep Dive Concepts Added**:
   - `wiki/concepts/deep_dive_process_ipc_and_fd.md`: `fork()` 시 커널 PCB/CoW 메모리 모델, 파일 디스크립터 테이블 3단계(Process FD -> Open File Description -> VFS Inode) 포인터 구조, 파이프라인 무한 행(Deadlock)의 수학적 원인과 EOF 도달 조건, 좀비 프로세스 방지 및 Concurrency 보장 패턴.
 - **Index Updated**: `index.md`에 Phase 2 문서 반영.
+
+## [2026-11-22] design | Phase 3: Signal Dispatcher & State Machine Architecture & Deep Dive
+- **Context**: 3단계 비동기 시그널 디스패처, 상태 머신 설계 및 심화 시그널/동시성 개념 문서화.
+- **Architectural Specifications Added**:
+  - `wiki/architecture/03_signal_dispatcher_and_state_machine.md`: 단일 전역 변수(`volatile sig_atomic_t g_signal_num`) 격리, 3대 셸 상태 머신(`STATE_INTERACTIVE`, `STATE_EXECUTION`, `STATE_HEREDOC`), `sigaction` 핸들러 구현, 터미널 `termios` 에코 제어(`ECHOCTL`), 시그널-종료상태 동기화 프로토콜(130/131).
+- **Deep Dive Concepts Added**:
+  - `wiki/concepts/deep_dive_signals_and_concurrency.md`: 하드웨어 인터럽트에서 TTY 드라이버 거쳐 커널 트랩까지의 경로, 시그널 핸들러 내 `printf`/`malloc` 호출 시의 Self-Deadlock 메커니즘, `volatile sig_atomic_t`의 하드웨어/컴파일러적 의미, `EINTR`과 `SA_RESTART`의 트레이드오프, 포그라운드 프로세스 그룹 시그널 브로드캐스팅 제어.
+- **Index Updated**: `index.md`에 Phase 3 문서 반영.

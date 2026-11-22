@@ -30,6 +30,7 @@
 | :--- | :--- | :--- |
 | [wiki/concepts/deep_dive_lexer_parser_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_lexer_parser_ast.md) | **[심화 1]** 왜 단순 split은 실패하는가? 오토마타(DFA), 문맥 자유 문법(CFG), 재귀 하향 파싱 및 확장 타이밍 논리 | [deep_dive_lexer_parser_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_lexer_parser_ast.md) |
 | [wiki/concepts/deep_dive_process_ipc_and_fd.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_process_ipc_and_fd.md) | **[심화 2]** `fork()` 커널 메모리 모델(CoW), FD 테이블 3단계 구조, 파이프라인 무한 행(Deadlock)과 EOF 법칙 | [deep_dive_process_ipc_and_fd.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_process_ipc_and_fd.md) |
+| [wiki/concepts/deep_dive_signals_and_concurrency.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_signals_and_concurrency.md) | **[심화 3]** 비동기 시그널(Signal)과 Self-Deadlock의 원리, `volatile sig_atomic_t`의 본질, 포그라운드 프로세스 그룹 제어 | [deep_dive_signals_and_concurrency.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/deep_dive_signals_and_concurrency.md) |
 | [wiki/concepts/allowed_functions_matrix.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/allowed_functions_matrix.md) | 허용 외부 함수 53종 전수 분석, Async-Signal-Safe 판정 및 FD/메모리 주의점 | [allowed_functions_matrix.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/concepts/allowed_functions_matrix.md) |
 
 ---
@@ -40,6 +41,7 @@
 | :--- | :--- | :--- |
 | [wiki/architecture/01_parser_and_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/01_parser_and_ast.md) | **[설계 1]** Lexer/Tokenizer DFA 규칙, EBNF 정형 문법, C 언어 AST 데이터 구조체 및 재귀 하향 파서 | [01_parser_and_ast.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/01_parser_and_ast.md) |
 | [wiki/architecture/02_execution_engine_and_ipc.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/02_execution_engine_and_ipc.md) | **[설계 2]** AST 트리 순회 디스패처, 파이프라인 병렬 IPC 실행 엔진, FD 라이프사이클 및 종료 상태 수집 | [02_execution_engine_and_ipc.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/02_execution_engine_and_ipc.md) |
+| [wiki/architecture/03_signal_dispatcher_and_state_machine.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/03_signal_dispatcher_and_state_machine.md) | **[설계 3]** 단일 전역 변수(`g_signal_num`) 격리, 3대 셸 시그널 상태 머신 및 터미널 에코 제어(`termios`) | [03_signal_dispatcher_and_state_machine.md](file:///Users/yong/Projects/gdtknight/42/minishell-wiki/wiki/architecture/03_signal_dispatcher_and_state_machine.md) |
 
 ---
 
