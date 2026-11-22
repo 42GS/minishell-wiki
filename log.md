@@ -28,3 +28,11 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Deep Dive Concepts Added**:
   - `wiki/concepts/deep_dive_lexer_parser_ast.md`: 왜 `ft_split`은 실패하는가, DFA 상태 머신 다이어그램, 촘스키 문법 계층(CFG)과 트리 구조의 필연성, 셔팅야드 vs 재귀 하향 파서 비교, 환경변수 조기 확장의 위험성과 POSIX 3단계 파이프라인.
 - **Index Updated**: `index.md`에 아키텍처 및 딥다이브 섹션 반영.
+
+## [2026-11-22] design | Phase 2: Execution Engine & IPC Pipeline Architecture & Deep Dive
+- **Context**: 2단계 실행 엔진, 프로세스 생명주기 및 IPC 파이프라인 설계와 심화 OS 개념 문서화.
+- **Architectural Specifications Added**:
+  - `wiki/architecture/02_execution_engine_and_ipc.md`: AST 트리 순회 디스패처, 단일 빌트인의 부모 프로세스 FD 백업/원복 패턴, $N$개 명령어 파이프라인의 엄격한 Pipe-Close 프로토콜, 리다이렉션 테이블 순차 평가, `waitpid` 팬인 및 종료 상태 코드 정규화(128+N).
+- **Deep Dive Concepts Added**:
+  - `wiki/concepts/deep_dive_process_ipc_and_fd.md`: `fork()` 시 커널 PCB/CoW 메모리 모델, 파일 디스크립터 테이블 3단계(Process FD -> Open File Description -> VFS Inode) 포인터 구조, 파이프라인 무한 행(Deadlock)의 수학적 원인과 EOF 도달 조건, 좀비 프로세스 방지 및 Concurrency 보장 패턴.
+- **Index Updated**: `index.md`에 Phase 2 문서 반영.
