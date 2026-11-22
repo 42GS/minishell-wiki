@@ -205,7 +205,7 @@ YesNo
 							the results.
 - Repeat multiple times with different commands and arguments. Try some
 							wrong commands like '/bin/ls filethatdoesntexist'
-- Try anything like expr $? + $?
+- Try anything like `expr &#36;? + &#36;?`
 - If something crashes, select the "crash" flag.
 - If something doesn't work, select the "incomplete work" flag.
 

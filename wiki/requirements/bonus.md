@@ -24,7 +24,7 @@
 - `command1 || command2`: `command1`의 종료 상태가 0이 아닌 경우(Failure)에만 `command2`를 실행.
 - **결합 법칙**: 왼쪽에서 오른쪽으로의 결합(Left-to-right associativity).
 - **연산자 우선순위**: `&&`와 `||`는 동등한 우선순위를 가지며, 파이프(`|`)보다는 우선순위가 낮다.
-  $$\text{Redirection} > \text{Pipe } (|) > \text{Logical Lists } (\&\&, ||)$$
+  > **연산자 우선순위 계층**: Redirection (`<`, `>`, `>>`, `<<`) > Pipeline (`|`) > Logical Lists (`&&`, `||`)
 - 관련 스펙: [[raw/specs/bash_lists|Bash Lists Reference]]
 
 ### 2.2 파서 아키텍처 요구사항

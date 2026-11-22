@@ -96,10 +96,10 @@
 
 | 빌트인 | 요구사항 명세 | 부모 프로세스 직접 실행 필요성 | 구현 매핑 |
 | :--- | :--- | :--- | :--- |
-| `echo` | `-n` 옵션 지원 (연속된 `-nnnn` 지원 포함) | 서브셸/부모 무관 | [[wiki/architecture/02_execution_engine_and_ipc|실행 엔진]] |
-| `cd` | 상대 또는 절대 경로만 지원 (옵션 없음) | **반드시 부모 프로세스** (작업 디렉토리 변경) | [[wiki/concepts/deep_dive_process_ipc_and_fd|프로세스 격리 심화]] |
-| `pwd` | 옵션 없음 (현재 작업 디렉토리 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix|getcwd]] |
-| `export` | 옵션 없음 (환경변수 설정 및 미인자 호출 시 목록 출력) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc|빌트인 실행]] |
-| `unset` | 옵션 없음 (환경변수 제거) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc|빌트인 실행]] |
-| `env` | 옵션/인자 없음 (현재 환경변수 목록 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix|환경변수]] |
-| `exit` | 옵션 없음 (종료 코드 인자 지정 가능, 0~255 오버플로우 처리) | **반드시 부모 프로세스** (셸 프로세스 종료) | [[raw/specs/bash_exit_status|종료 상태 규칙]] |
+| `echo` | `-n` 옵션 지원 (연속된 `-nnnn` 지원 포함) | 서브셸/부모 무관 | [[wiki/architecture/02_execution_engine_and_ipc]] |
+| `cd` | 상대 또는 절대 경로만 지원 (옵션 없음) | **반드시 부모 프로세스** (작업 디렉토리 변경) | [[wiki/concepts/deep_dive_process_ipc_and_fd]] |
+| `pwd` | 옵션 없음 (현재 작업 디렉토리 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix]] |
+| `export` | 옵션 없음 (환경변수 설정 및 미인자 호출 시 목록 출력) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc]] |
+| `unset` | 옵션 없음 (환경변수 제거) | **반드시 부모 프로세스** (환경변수 테이블 갱신) | [[wiki/architecture/02_execution_engine_and_ipc]] |
+| `env` | 옵션/인자 없음 (현재 환경변수 목록 출력) | 서브셸/부모 무관 | [[wiki/concepts/allowed_functions_matrix]] |
+| `exit` | 옵션 없음 (종료 코드 인자 지정 가능, 0~255 오버플로우 처리) | **반드시 부모 프로세스** (셸 프로세스 종료) | [[raw/specs/bash_exit_status]] |

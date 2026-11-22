@@ -77,7 +77,7 @@ graph TD
     P1 --> C1
     P1 --> C2
 ```
-실행 엔진은 파이프 서브트리를 재귀 순회하여 $N$개의 커맨드 리스트(`[A, B, C]`)를 수집하고, $N-1$개의 파이프(`int fds[N-1][2]`)를 일괄 생성합니다.
+실행 엔진은 파이프 서브트리를 재귀 순회하여 N개의 커맨드 리스트(`[A, B, C]`)를 수집하고, (N - 1)개의 파이프(`int fds[N-1][2]`)를 일괄 생성합니다.
 
 ### 3.2 Pipe End 관리 및 FD 생명주기 (Strict Closing Protocol)
 
@@ -88,15 +88,15 @@ graph TD
 ```
 
 1. **파이프 생성**:
-   - $N$개의 명령어를 위해 $N-1$개의 `pipe(pipe_fd[i])`를 부모에서 미리 생성. ([[wiki/concepts/allowed_functions_matrix|pipe 시스템 콜]])
-2. **자식 프로세스 ($i$번째 프로세스, $0 \le i < N$) 내부**:
-   - **입력 연결**: $i > 0$이면 `dup2(pipe_fd[i-1][0], STDIN_FILENO)` 연결.
-   - **출력 연결**: $i < N - 1$이면 `dup2(pipe_fd[i][1], STDOUT_FILENO)` 연결.
-   - **자식 내부 모든 파이프 닫기**: 루프를 돌며 부모로부터 상속받은 $N-1$개 파이프의 양쪽 끝(`[0]`, `[1]`)을 **모두 `close`**합니다.
+   - (N - 1)개의 명령어를 위해 `pipe(pipe_fd[i])`를 부모에서 미리 생성. ([[wiki/concepts/allowed_functions_matrix|pipe 시스템 콜]])
+2. **자식 프로세스 (i번째 프로세스, 0 <= i < N) 내부**:
+   - **입력 연결**: `i > 0`이면 `dup2(pipe_fd[i-1][0], STDIN_FILENO)` 연결.
+   - **출력 연결**: `i < N - 1`이면 `dup2(pipe_fd[i][1], STDOUT_FILENO)` 연결.
+   - **자식 내부 모든 파이프 닫기**: 루프를 돌며 부모로부터 상속받은 (N - 1)개 파이프의 양쪽 끝(`[0]`, `[1]`)을 **모두 `close`**합니다.
    - **로컬 리다이렉션 적용**: 명령어 노드 자체의 리다이렉션(`<`, `>`)이 있다면 파이프 연결 위에 덮어씌웁니다(`dup2`).
    - `execve` 호출 (실패 시 즉시 `exit`).
 3. **부모 프로세스 내부**:
-   - 자식 포크가 끝나는 즉시, 부모가 가진 $N-1$개 파이프의 양쪽 끝을 **전부 즉시 `close`**합니다.
+   - 자식 포크가 끝나는 즉시, 부모가 가진 (N - 1)개 파이프의 양쪽 끝을 **전부 즉시 `close`**합니다.
    - 부모가 쓰기 끝을 닫아야만, 1번 프로세스가 종료되었을 때 2번 프로세스가 정상적으로 `EOF(0)`를 수신할 수 있습니다.
 
 ---
@@ -165,9 +165,9 @@ int wait_pipeline(pid_t *pids, int count)
 ### 상태 코드 정규화 규칙 (연계: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 상태 동기화]])
 - **정상 종료 (`WIFEXITED`)**: 프로세스가 `exit(code)`로 종료한 값 (0~255).
 - **시그널 종료 (`WIFSIGNALED`)**: 프로세스가 처리되지 않은 시그널에 의해 강제 종료된 경우:
-  - `SIGINT` (Ctrl+C, 시그널 2) -> $128 + 2 = \mathbf{130}$
-  - `SIGQUIT` (Ctrl+\, 시그널 3) -> $128 + 3 = \mathbf{131}$
-  - `SIGSEGV` (세그폴트, 시그널 11) -> $128 + 11 = \mathbf{139}$
+  - `SIGINT` (Ctrl+C, 시그널 2) -> `128 + 2 = 130`
+  - `SIGQUIT` (Ctrl+\, 시그널 3) -> `128 + 3 = 131`
+  - `SIGSEGV` (세그폴트, 시그널 11) -> `128 + 11 = 139`
 - **명령어 실행 실패**:
   - `command not found` -> **127**
   - `permission denied` 또는 `is a directory` -> **126**

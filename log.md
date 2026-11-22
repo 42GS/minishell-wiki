@@ -71,3 +71,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - 총 위키링크 연결선 (Edges): **250개** (고아 노드 0개)
   - 미해결 링크 (Unresolved): **0개**
   - 핵심 허브 노드: `index.md`, `02_execution_engine_and_ipc.md`(43 백링크), `03_signal_dispatcher_and_state_machine.md`(30 백링크), `01_parser_and_ast.md`(20 백링크).
+
+## [2026-11-22] fix | Resolve Markdown Table Column Mismatches and LaTeX Math Parser Collisions
+- **Context**: Obsidian에서 마크다운 테이블이 깨져 보이고 수식 파서 충돌로 본문 텍스트가 깨지던 현상 전수 감사 및 수정.
+- **Root Causes Identified**:
+  - **테이블 열 분리자 파이프 충돌**: 마크다운 테이블 내부에서 위키링크 `[[target|alias]]`나 인라인 코드 내 파이프(`|`, `||`)를 사용할 경우 마크다운 파서가 이를 테이블 열(Column) 구분자로 파싱하여 헤더와 행의 컬럼 수가 어긋나 표가 붕괴됨.
+  - **LaTeX 수식(`$`) 파서 오인식**: 셸 변수(`$?`, `$VAR`, `$USER`)가 문서 내 여러 번 등장할 때 마크다운 파서가 이를 인라인 LaTeX 수식(`$...$`)으로 인식하여 사이의 본문 텍스트 전체를 수식으로 렌더링하고 레이아웃을 깨뜨림.
+- **Fixes Applied**:
+  - 모든 테이블 내부 위키링크를 파이프 없는 `[[target]]` 및 표준 마크다운 상대 링크 `[label](target.md)`로 교체.
+  - 테이블 내부의 모든 파이프 문자를 HTML 엔티티 `&#124;`로 치환하여 테이블 컬럼 완벽 보존.
+  - 셸 변수 표현의 `$`를 HTML 엔티티 `&#36;` 또는 정규 코드 스팬으로 격리하여 LaTeX 수식 충돌 0건 달성.
+  - `audit_markdown.py` 전수 감사 결과: 테이블 불일치 0건, 수식 충돌 0건, 린트 에러 0건.

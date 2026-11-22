@@ -54,10 +54,10 @@ cmd_word         ::= [^ \t\n|<>&()]+  (* with quote support *)
 ### 연산자 우선순위 및 결합성
 | 레벨 | 문법 요소 | 기호 | 결합성 (Associativity) | 관련 명세 |
 | :---: | :--- | :---: | :---: | :--- |
-| **1 (최상위)** | 괄호 서브셸 그룹핑 | `( )` | 괄호 내부 우선 평가 | [[wiki/requirements/bonus|보너스 서브셸]] |
-| **2** | 리다이렉션 | `<`, `>`, `>>`, `<<` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[wiki/requirements/mandatory|필수 리다이렉션]] |
-| **3** | 파이프라인 | `\|` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[raw/specs/bash_pipelines|파이프라인 스펙]] |
-| **4 (최하위)** | 논리 리스트 | `&&`, `\|\|` | 왼쪽에서 오른쪽으로 (동등 우선순위) | [[wiki/requirements/bonus|보너스 논리 연산자]] |
+| **1 (최상위)** | 괄호 서브셸 그룹핑 | `( )` | 괄호 내부 우선 평가 | [[wiki/requirements/bonus]] |
+| **2** | 리다이렉션 | `<`, `>`, `>>`, `<<` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[wiki/requirements/mandatory]] |
+| **3** | 파이프라인 | `&#124;` | 왼쪽에서 오른쪽으로 (Left-to-right) | [[raw/specs/bash_pipelines]] |
+| **4 (최하위)** | 논리 리스트 | `&&`, `&#124;&#124;` | 왼쪽에서 오른쪽으로 (동등 우선순위) | [[wiki/requirements/bonus]] |
 
 ---
 
@@ -181,11 +181,11 @@ graph TD
 
 | 상황 | 입력 예시 | Bash 표준 에러 메시지 | 종료 상태 (`$?`) |
 | :--- | :--- | :--- | :---: |
-| **연속 파이프** | `cat \| \| grep a` | `minishell: syntax error near unexpected token '\|'` | `2` (또는 258) |
+| **연속 파이프** | `cat &#124; &#124; grep a` | `minishell: syntax error near unexpected token '&#124;'` | `2` (또는 258) |
 | **닫히지 않은 괄호** | `(cd /tmp && ls` | `minishell: syntax error: unexpected end of file` | `2` |
 | **빈 괄호** | `( )` | `minishell: syntax error near unexpected token ')'` | `2` |
 | **리다이렉션 타겟 누락** | `cat <` | `minishell: syntax error near unexpected token 'newline'` | `2` |
-| **리다이렉션 뒤 연산자** | `cat < \|` | `minishell: syntax error near unexpected token '\|'` | `2` |
+| **리다이렉션 뒤 연산자** | `cat < &#124;` | `minishell: syntax error near unexpected token '&#124;'` | `2` |
 | **닫히지 않은 따옴표** | `echo "hello` | `minishell: unexpected EOF while looking for matching '"'` | `2` (미해석 처리) |
 
 ---
