@@ -30,13 +30,13 @@
 
 ```mermaid
 graph TD
-    Root["NODE_AND (&&)"]
-    L1["NODE_PIPE (|)"]
-    R1["NODE_OR (||)"]
-    Cmd1["ls -la"]
-    Cmd2["grep txt"]
-    Cmd3["echo 'Found'"]
-    Cmd4["echo 'Not Found'"]
+    Root["NODE_AND - Logic AND"]
+    L1["NODE_PIPE - Pipe"]
+    R1["NODE_OR - Logic OR"]
+    Cmd1["Command: ls -la"]
+    Cmd2["Command: grep txt"]
+    Cmd3["Command: echo Found"]
+    Cmd4["Command: echo Not Found"]
 
     Root --> L1
     Root --> R1

@@ -52,19 +52,19 @@ char **tokens = ft_split(line, ' ');
 stateDiagram-v2
     [*] --> STATE_GENERAL
 
-    STATE_GENERAL --> STATE_IN_SINGLE_QUOTE : ' (Single Quote)
-    STATE_IN_SINGLE_QUOTE --> STATE_GENERAL : ' (Close Single Quote)
+    STATE_GENERAL --> STATE_IN_SINGLE_QUOTE : Open Single Quote
+    STATE_IN_SINGLE_QUOTE --> STATE_GENERAL : Close Single Quote
 
-    STATE_GENERAL --> STATE_IN_DOUBLE_QUOTE : " (Double Quote)
-    STATE_IN_DOUBLE_QUOTE --> STATE_GENERAL : " (Close Double Quote)
+    STATE_GENERAL --> STATE_IN_DOUBLE_QUOTE : Open Double Quote
+    STATE_IN_DOUBLE_QUOTE --> STATE_GENERAL : Close Double Quote
 
-    STATE_GENERAL --> STATE_OPERATOR : |, <, >, &, (, )
-    STATE_OPERATOR --> STATE_GENERAL : Operator Complete
+    STATE_GENERAL --> STATE_OPERATOR : Metacharacter Detected
+    STATE_OPERATOR --> STATE_GENERAL : Operator Completed
 
-    STATE_GENERAL --> STATE_WHITESPACE : Space / Tab
-    STATE_WHITESPACE --> STATE_GENERAL : Non-space character
+    STATE_GENERAL --> STATE_WHITESPACE : Space or Tab
+    STATE_WHITESPACE --> STATE_GENERAL : Non-whitespace Character
 
-    STATE_GENERAL --> [*] : EOF / \0
+    STATE_GENERAL --> [*] : End Of Input
 ```
 
 ### 2.2 상태 머신의 핵심 규칙
@@ -140,8 +140,8 @@ Bash의 `&&`와 `||`는 왼쪽에서 오른쪽으로 묶입니다. 즉 `(A && B)
 
 ```mermaid
 graph TD
-    Root["NODE_AND (&&)"]
-    L1["NODE_AND (&&)"]
+    Root["NODE_AND - Logic AND"]
+    L1["NODE_AND - Left Child"]
     C["Command C"]
     A["Command A"]
     B["Command B"]

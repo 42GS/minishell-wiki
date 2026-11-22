@@ -12,13 +12,13 @@
 
 ```mermaid
 graph TD
-    Root["execute_ast(node)"]
+    Root["execute_ast"]
     
-    Root -->|NODE_AND| ExecAnd["execute_and(node)<br/>Left -> If $? == 0 -> Right"]
-    Root -->|NODE_OR| ExecOr["execute_or(node)<br/>Left -> If $? != 0 -> Right"]
-    Root -->|NODE_PIPE| ExecPipe["execute_pipeline(node)<br/>Setup pipes -> Fork all -> Wait all"]
-    Root -->|NODE_SUBSHELL| ExecSub["execute_subshell(node)<br/>Fork -> execute_ast(left) in child"]
-    Root -->|NODE_COMMAND| ExecCmd["execute_command(node)<br/>Builtin vs External"]
+    Root -->|NODE_AND| ExecAnd["execute_and: If left succeeds, run right"]
+    Root -->|NODE_OR| ExecOr["execute_or: If left fails, run right"]
+    Root -->|NODE_PIPE| ExecPipe["execute_pipeline: Pipe and fork all commands"]
+    Root -->|NODE_SUBSHELL| ExecSub["execute_subshell: Fork isolated child process"]
+    Root -->|NODE_COMMAND| ExecCmd["execute_command: Builtin or External"]
 ```
 
 ### 1.1 노드별 실행 규격 요약
@@ -40,13 +40,13 @@ graph TD
 
 ```mermaid
 flowchart TD
-    Start["execute_simple_command()"] --> Expand["1. Parameter Expansion & Quote Removal"]
+    Start["execute_simple_command"] --> Expand["1. Parameter Expansion and Quote Removal"]
     Expand --> CheckBuiltin{"2. Is Builtin?"}
     
-    CheckBuiltin -->|Yes (cd, export, unset, exit, ...)| ParentExec["3. Backup Std FDs<br/>4. Apply Redirections<br/>5. Run Builtin in Parent<br/>6. Restore Std FDs"]
-    CheckBuiltin -->|No (External binary or subshell)| ForkChild["3. fork()<br/>4. Child: Apply Redirs & execve()<br/>5. Parent: waitpid()"]
+    CheckBuiltin -->|Yes| ParentExec["Backup FDs, Apply Redirs, Run in Parent, Restore FDs"]
+    CheckBuiltin -->|No| ForkChild["Fork Child, Apply Redirs, Execve, Parent Waits"]
     
-    ParentExec --> End["Set ctx->last_exit_status"]
+    ParentExec --> End["Update last exit status"]
     ForkChild --> End
 ```
 
@@ -105,12 +105,12 @@ graph TD
 
 ```mermaid
 graph LR
-    RedirList["Redirection List<br/>(< in, >> log, > out)"]
-    Eval["Left-to-Right Evaluation"]
-    FDTable["Process FD Table (0, 1, 2)"]
+    RedirList["Redirection List: In, Out, Append, Heredoc"]
+    Eval["Left to Right Evaluation"]
+    FDTable["Process FD Table: 0, 1, 2"]
 
     RedirList --> Eval
-    Eval -->|open() & dup2()| FDTable
+    Eval -->|Apply open and dup2| FDTable
 ```
 
 ### 4.1 리다이렉션 타입별 처리

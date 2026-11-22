@@ -44,3 +44,17 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Deep Dive Concepts Added**:
   - `wiki/concepts/deep_dive_signals_and_concurrency.md`: 하드웨어 인터럽트에서 TTY 드라이버 거쳐 커널 트랩까지의 경로, 시그널 핸들러 내 `printf`/`malloc` 호출 시의 Self-Deadlock 메커니즘, `volatile sig_atomic_t`의 하드웨어/컴파일러적 의미, `EINTR`과 `SA_RESTART`의 트레이드오프, 포그라운드 프로세스 그룹 시그널 브로드캐스팅 제어.
 - **Index Updated**: `index.md`에 Phase 3 문서 반영.
+
+## [2026-11-22] lint | Full Wiki Lint & Mermaid Diagram Syntax Fix
+- **Context**: 아키텍처 및 개념 문서 내 Mermaid 다이어그램 렌더링 깨짐 현상 전수 점검 및 린트 수정.
+- **Root Causes Identified**:
+  - `wiki/architecture/02_execution_engine_and_ipc.md`: 노드 라벨 내 `->` 연산자, `$?`, `==`, HTML `<br/>` 태그, 엣지 라벨 내 언쿼트 특수문자(`()`, `,`, `&`), 라벨 내 `<>` 태그 오인 문자로 인한 파서 충돌.
+  - `wiki/concepts/deep_dive_lexer_parser_ast.md`: `stateDiagram-v2` 전이 라벨 내 작은따옴표(`'`), 큰따옴표(`"`), 파이프(`|`), 쉼표, 역슬래시(`\0`)로 인한 문법 에러.
+  - `wiki/requirements/bonus.md`: 노드 라벨 내 `|` 파이프 문자로 인한 엣지 구분자 오인식.
+  - `wiki/concepts/deep_dive_process_ipc_and_fd.md` & `CLAUDE.md`: `subgraph` 공백 미인용 및 HTML `<br/>` 태그 잔존.
+  - `wiki/architecture/01_parser_and_ast.md`: 노드 라벨 내 특수문자 및 순환 그래프 에지 충돌.
+- **Fixes Applied**:
+  - 모든 HTML 태그(`<br/>`) 제거 및 간결한 표준 단일 텍스트로 치환.
+  - 노드 라벨 내 `->`, `|`, `$?`, `()`, `<>` 특수문자를 안전한 텍스트로 교체.
+  - `stateDiagram-v2` 전이 라벨을 표준 영문 식별자로 전면 수정.
+  - `comprehensive_lint.py`를 작성하여 위키 전수 검증: 잔여 이슈 0건(Total issues found: 0) 달성.

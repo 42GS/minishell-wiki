@@ -30,13 +30,13 @@
 
 ```mermaid
 graph TD
-    Raw["Layer 1: Raw Sources (raw/)<br/>- Immutable Source of Truth<br/>- Subject PDF/MD, EvalHub Scale, Man Pages, Bash Specs"]
-    Wiki["Layer 2: The Wiki (wiki/)<br/>- Compounding Knowledge Artifact<br/>- Requirements, Concepts, Architecture, Builtins, Testing"]
-    Schema["Layer 3: The Schema (CLAUDE.md)<br/>- Wiki Conventions, Ingest/Query/Lint Protocols"]
+    Raw["Layer 1: Raw Sources (Immutable)"]
+    Wiki["Layer 2: The Wiki (Compounding Knowledge)"]
+    Schema["Layer 3: The Schema (CLAUDE.md)"]
     Index["index.md (Content Catalog)"]
     Log["log.md (Chronological Journal)"]
 
-    Raw -->|Ingest / Synthesis| Wiki
+    Raw -->|Ingest and Synthesis| Wiki
     Wiki <--> Index
     Schema -->|Governs| Wiki
     Wiki -->|Maintains Timeline| Log

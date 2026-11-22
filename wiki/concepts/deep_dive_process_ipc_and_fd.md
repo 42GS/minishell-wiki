@@ -33,26 +33,26 @@ UNIX 계열 운영체제에서 모든 프로세스는 부모-자식의 트리 �
 
 ```mermaid
 graph LR
-    subgraph Process A
+    subgraph "Process A"
         FD0_A["FD 0 (stdin)"]
         FD1_A["FD 1 (stdout)"]
         FD3_A["FD 3 (pipe write)"]
     end
 
-    subgraph Process B
+    subgraph "Process B"
         FD0_B["FD 0 (stdin)"]
         FD3_B["FD 3 (pipe write)"]
     end
 
-    subgraph Kernel Global
-        OFT_TermIn["Open File Description<br/>(Terminal In, Ref: 2)"]
-        OFT_TermOut["Open File Description<br/>(Terminal Out, Ref: 1)"]
-        OFT_PipeW["Open File Description<br/>(Pipe Write End, Ref: 2)"]
+    subgraph "Kernel Global"
+        OFT_TermIn["Open File Description (Terminal In, Ref 2)"]
+        OFT_TermOut["Open File Description (Terminal Out, Ref 1)"]
+        OFT_PipeW["Open File Description (Pipe Write End, Ref 2)"]
     end
 
-    subgraph VFS
+    subgraph "VFS Layer"
         VFS_TTY["Device Inode (/dev/tty)"]
-        VFS_Pipe["FIFO / Pipe Buffer in RAM"]
+        VFS_Pipe["FIFO or Pipe Buffer in RAM"]
     end
 
     FD0_A --> OFT_TermIn

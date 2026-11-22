@@ -12,11 +12,11 @@
 
 ```mermaid
 flowchart LR
-    Input["Raw String (char*)"] --> Lexer["Lexer (DFA)"]
-    Lexer --> Tokens["Token Stream (t_token*)"]
+    Input["Raw String Input"] --> Lexer["Lexer (DFA)"]
+    Lexer --> Tokens["Token Stream"]
     Tokens --> Syntax["Syntax Validator"]
     Syntax --> Parser["Parser (Recursive Descent)"]
-    Parser --> AST["Abstract Syntax Tree (t_ast*)"]
+    Parser --> AST["Abstract Syntax Tree"]
     AST --> Executor["Execution Engine"]
 ```
 
@@ -136,11 +136,11 @@ typedef struct s_ast_node {
 
 ```mermaid
 graph TD
-    P_AndOr["parse_and_or()"] --> P_Pipe["parse_pipeline()"]
-    P_Pipe --> P_Cmd["parse_command()"]
-    P_Cmd -->|If LPAREN| P_Sub["parse_subshell()"]
-    P_Cmd -->|Else| P_Simple["parse_simple_command()"]
-    P_Sub --> P_AndOr
+    P_AndOr["parse_and_or"] --> P_Pipe["parse_pipeline"]
+    P_Pipe --> P_Cmd["parse_command"]
+    P_Cmd -->|If LPAREN| P_Sub["parse_subshell"]
+    P_Cmd -->|Else| P_Simple["parse_simple_command"]
+    P_Sub -.->|Recurse| P_AndOr
 ```
 
 1. **`parse_and_or(t_token **curr)`**:
