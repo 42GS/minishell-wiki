@@ -14,7 +14,15 @@
 
 ---
 
-## 2. Requirements & Evaluation (요구사항 및 평가 분석)
+## 2. Engineering Process & GitHub Infrastructure (프로세스 및 깃허브 인프라)
+
+| 문서 | 설명 | 위키 링크 |
+| :--- | :--- | :--- |
+| [github_engineering_standards.md](wiki/process/github_engineering_standards.md) | **[포트폴리오 전략]** GitHub Flow, Conventional Commits, 마일스톤/라벨, Issue/PR 템플릿, CI 자동화 파이프라인 | [GitHub Engineering Standards](wiki/process/github_engineering_standards.md) |
+
+---
+
+## 3. Requirements & Evaluation (요구사항 및 평가 분석)
 
 | 문서 | 설명 | 위키 링크 |
 | :--- | :--- | :--- |
@@ -24,7 +32,7 @@
 
 ---
 
-## 3. Core Concepts & Deep Dive (핵심 이론 및 심화 학습)
+## 4. Core Concepts & Deep Dive (핵심 이론 및 심화 학습)
 
 | 문서 | 설명 | 위키 링크 |
 | :--- | :--- | :--- |
@@ -35,7 +43,7 @@
 
 ---
 
-## 4. System Architecture Specifications (시스템 아키텍처 상세 설계)
+## 5. System Architecture Specifications (시스템 아키텍처 상세 설계)
 
 | 문서 | 설명 | 위키 링크 |
 | :--- | :--- | :--- |
@@ -45,7 +53,7 @@
 
 ---
 
-## 5. Raw Sources Registry (불변 원문 소스 보관소)
+## 6. Raw Sources Registry (불변 원문 소스 보관소)
 
 | 분류 | 소스 명 | 설명 | 위키 링크 |
 | :--- | :--- | :--- | :--- |
