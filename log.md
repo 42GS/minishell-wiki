@@ -94,7 +94,19 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `templates/github/workflows/ci.yml`: Ubuntu 환경 Norminette, 엄격 빌드(-Wall -Wextra -Werror), No-relink 검사, Valgrind 메모리 릭 검증 자동화 파이프라인.
 - **Index & Graph Updated**: `index.md`에 프로세스 섹션 추가 및 216개 상호 연결선 유지.
 
-## [2026-11-22] feat | Register 17 Standard GitHub Issues & Milestone Roadmap
+## [2026-11-22] refactor | Separate Dual-Repository Issue Architectures (minishell-wiki vs minishell)
+- **Context**: 위키/설계 리포지토리(`minishell-wiki.git`)와 소스 코드 구현 리포지토리(`minishell.git`)의 역할 및 이슈 트래킹 체계 엄격 분리.
+- **Repository Isolation**:
+  - `42GS/minishell-wiki`:
+    - 원격 `origin` (`git@github.com:42GS/minishell-wiki.git`) 연동 및 `main` 푸시 완료.
+    - 위키/설계 전용 마일스톤(M1~M3) 및 12종 라벨 체계 생성.
+    - 위키 전용 이슈 #1~#6 생성 및 완료 이슈(#1~#5) CLOSED 처리, #6 OPEN (Next).
+    - `minishell-wiki` 커밋 타이틀의 `[#1]`~`[#5]`가 해당 위키 이슈와 1:1로 직접 연결됨.
+  - `42GS/minishell`:
+    - 기존 혼재되어 있던 17개 이슈 정리 후, 순수 C 언어 코드 구현 이슈 11개(#23~#33)로 명확히 재정렬.
+- **Artifacts Updated**:
+  - `wiki/process/roadmap_and_issues.md`: 듀얼 리포지토리 아키텍처 다이어그램 및 리포지토리별 분리된 이슈 트래킹 테이블 구축.
+- **Index & Graph Updated**: 221개 지식 그래프 엣지 및 마크다운 무결성 유지.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
