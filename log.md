@@ -152,6 +152,12 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
 - **Updates Applied**:
   - `CLAUDE.md` Section 1.3: `GitHub Flow & PR-Only 브랜치 전략` 명문화.
   - 본 변경사항부터 `docs/5-pr-workflow-policy` 브랜치에서 PR 워크플로우를 적용하여 검증.
+
+## [2026-11-22] ci | Establish Wiki Health Lint CI & Harden Code Repo CI Pipeline
+- **Context**: `main` 브랜치 보호(Branch Protection) 연동에 앞서 두 리포지토리 모두 엄격한 자동화 CI 파이프라인 구축.
+- **Updates Applied**:
+  - `42GS/minishell-wiki`: `scripts/lint_wiki.py` 및 `.github/workflows/wiki-lint.yml` 추가 (PR/Push 시 위키링크, 고아 페이지, 색인 누락, 테이블, 수식, Mermaid 자동 검증).
+  - `42GS/minishell`: `.github/workflows/ci.yml` 및 `tests/unit/run_unit.sh` 강화 (`make all`/`bonus` 각각의 No-relink 검사, `fclean`/`re` 잔여물 검사, Unit Test Valgrind 검증, `--errors-for-leak-kinds=all` 적용).
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
