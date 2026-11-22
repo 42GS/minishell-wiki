@@ -174,6 +174,14 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `&&`/`||` < `|` < `( )` 서브셸 및 리다이렉션 우선순위·좌결합성 조립, 혼합 리다이렉션/단독 리다이렉션 명령 지원, Bash 표준 문법 오류(`err=2`) 및 부분 트리 릭 프리 해제(`join_ast_nodes`) 보장.
   - `tests/unit/test_parser.c` 단위 테스트 작성 및 macOS `leaks` / Linux CI Valgrind 0바이트 릭 통과.
 - **PR & Roadmap Sync**: `42GS/minishell#36` CI 통과 후 머지 완료 (`f6e3cdd`), `Issue #26` 자동 종료 (M2 완료 -> M3 진입).
+
+## [2026-11-22] process | Enrich Metadata Across All Issues & PRs in Both Repositories
+- **Context**: `42GS/minishell` 및 `42GS/minishell-wiki`에 생성된 전체 Issue(17건) 및 PR(7건)의 메타데이터(Assignees, Milestone, Labels, 완료 체크리스트) 전수 점검 및 보충.
+- **Updates Applied**:
+  - **Assignees**: 양쪽 리포지토리 모든 Issue·PR에 담당자(`gdtknight`) 일괄 할당.
+  - **PR Milestone & Labels**: 기존 누락되어 있던 PR #34~#36(`minishell`) 및 PR #7~#10(`minishell-wiki`)에 마일스톤과 영역·우선순위·안전성 라벨 부여.
+  - **Issue Checklist Sync**: 종료된 Issue(#23~#26, Wiki #6) 본문의 완료 조건 체크박스를 `- [x]`로 완료 처리.
+  - **`CLAUDE.md` 규칙 추가**: 향후 PR 생성 시 필수 메타데이터 부여 및 이슈 종료 시 체크리스트 동기화 규칙 명문화.
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
