@@ -10,7 +10,7 @@
 
 ## 1. Engine Architecture & Node Dispatcher
 
-실행 엔진은 파서([[wiki/architecture/01_parser_and_ast|01_parser_and_ast.md]])가 완성한 AST의 루트 노드를 인자로 받아 트리를 재귀 순회(Recursive Traversal)하며 노드 타입에 따라 적절한 실행 전략으로 디스패치한다.
+실행 엔진은 파서([[wiki/architecture/01_parser_and_ast|01_parser_and_ast.md]])가 완성한 AST의 루트 노드를 인자로 받아 트리를 재귀 순회(Recursive Traversal)하며 노드 타입에 따라 적절한 실행 전략으로 디스패치합니다.
 
 ```mermaid
 graph TD
@@ -88,13 +88,13 @@ graph TD
 ```
 
 1. **파이프 생성**:
-   - (N - 1)개의 명령어를 위해 `pipe(pipe_fd[i])`를 부모에서 미리 생성. ([[wiki/concepts/allowed_functions_matrix|pipe 시스템 콜]])
+   - (N - 1)개의 명령어를 위해 `pipe(pipe_fd[i])`를 부모에서 미리 생성합니다. ([[wiki/concepts/allowed_functions_matrix|pipe 시스템 콜]])
 2. **자식 프로세스 (i번째 프로세스, 0 <= i < N) 내부**:
-   - **입력 연결**: `i > 0`이면 `dup2(pipe_fd[i-1][0], STDIN_FILENO)` 연결.
-   - **출력 연결**: `i < N - 1`이면 `dup2(pipe_fd[i][1], STDOUT_FILENO)` 연결.
+   - **입력 연결**: `i > 0`이면 `dup2(pipe_fd[i-1][0], STDIN_FILENO)`를 연결합니다.
+   - **출력 연결**: `i < N - 1`이면 `dup2(pipe_fd[i][1], STDOUT_FILENO)`를 연결합니다.
    - **자식 내부 모든 파이프 닫기**: 루프를 돌며 부모로부터 상속받은 (N - 1)개 파이프의 양쪽 끝(`[0]`, `[1]`)을 **모두 `close`**합니다.
    - **로컬 리다이렉션 적용**: 명령어 노드 자체의 리다이렉션(`<`, `>`)이 있다면 파이프 연결 위에 덮어씌웁니다(`dup2`).
-   - `execve` 호출 (실패 시 즉시 `exit`).
+   - `execve`를 호출합니다 (실패 시 즉시 `exit`합니다).
 3. **부모 프로세스 내부**:
    - 자식 포크가 끝나는 즉시, 부모가 가진 (N - 1)개 파이프의 양쪽 끝을 **전부 즉시 `close`**합니다.
    - 부모가 쓰기 끝을 닫아야만, 1번 프로세스가 종료되었을 때 2번 프로세스가 정상적으로 `EOF(0)`를 수신할 수 있습니다.
@@ -117,18 +117,18 @@ graph LR
 
 ### 4.1 리다이렉션 타입별 처리
 1. **`REDIR_IN` (`< file`)**:
-   - `fd = open(target, O_RDONLY)`
-   - 실패 시: `perror(target)`, 에러 상태 `1` 설정 후 중단.
-   - 성공 시: `dup2(fd, STDIN_FILENO)`, `close(fd)`.
+   - `fd = open(target, O_RDONLY)`로 입력 파일을 엽니다.
+   - 실패 시 `perror(target)`를 출력하고 에러 상태 `1`을 설정한 뒤 중단합니다.
+   - 성공 시 `dup2(fd, STDIN_FILENO)`로 연결하고 `close(fd)`를 호출합니다.
 2. **`REDIR_OUT` (`> file`)**:
-   - `fd = open(target, O_WRONLY | O_CREAT | O_TRUNC, 0644)`
-   - 성공 시: `dup2(fd, STDOUT_FILENO)`, `close(fd)`.
+   - `fd = open(target, O_WRONLY | O_CREAT | O_TRUNC, 0644)`로 출력 파일을 엽니다.
+   - 성공 시 `dup2(fd, STDOUT_FILENO)`로 연결하고 `close(fd)`를 호출합니다.
 3. **`REDIR_APPEND` (`>> file`)**:
-   - `fd = open(target, O_WRONLY | O_CREAT | O_APPEND, 0644)`
-   - 성공 시: `dup2(fd, STDOUT_FILENO)`, `close(fd)`.
+   - `fd = open(target, O_WRONLY | O_CREAT | O_APPEND, 0644)`로 출력 파일을 엽니다.
+   - 성공 시 `dup2(fd, STDOUT_FILENO)`로 연결하고 `close(fd)`를 호출합니다.
 4. **`REDIR_HEREDOC` (`<< delimiter`)**:
-   - **파싱 직후/실행 전 단계**에서 임시 파이프 또는 임시 파일에 사용자의 Here-doc 입력을 미리 수집 완료해 둠. ([[wiki/architecture/03_signal_dispatcher_and_state_machine|Here-doc 시그널 처리 연동]])
-   - 실행 단계에서는 열려있는 `heredoc_fd`를 단순히 `dup2(heredoc_fd, STDIN_FILENO)`로 연결하고 `close(heredoc_fd)`.
+   - **파싱 직후/실행 전 단계**에서 임시 파이프 또는 임시 파일에 사용자의 Here-doc 입력을 미리 수집해 둡니다. ([[wiki/architecture/03_signal_dispatcher_and_state_machine|Here-doc 시그널 처리 연동]])
+   - 실행 단계에서는 열려 있는 `heredoc_fd`를 `dup2(heredoc_fd, STDIN_FILENO)`로 연결한 뒤 `close(heredoc_fd)`를 호출합니다.
 
 ---
 
@@ -163,7 +163,7 @@ int wait_pipeline(pid_t *pids, int count)
 ```
 
 ### 상태 코드 정규화 규칙 (연계: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 상태 동기화]])
-- **정상 종료 (`WIFEXITED`)**: 프로세스가 `exit(code)`로 종료한 값 (0~255).
+- **정상 종료 (`WIFEXITED`)**: 프로세스가 `exit(code)`로 종료한 값(`0`~`255`)을 사용합니다.
 - **시그널 종료 (`WIFSIGNALED`)**: 프로세스가 처리되지 않은 시그널에 의해 강제 종료된 경우:
   - `SIGINT` (Ctrl+C, 시그널 2) -> `128 + 2 = 130`
   - `SIGQUIT` (Ctrl+\, 시그널 3) -> `128 + 3 = 131`

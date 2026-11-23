@@ -3,13 +3,13 @@
 > **Navigation**: [[index|Hub: Index]] | [[CLAUDE|Schema & Rules]] | [[wiki/process/roadmap_and_issues|Dual-Repo Roadmap]]  
 > **Code Repository**: `git@github.com:42GS/minishell.git` | **Wiki Repository**: `git@github.com:42GS/minishell-wiki.git`  
 > **Templates**: `templates/github/` (Issue/PR Templates, CI Workflow)  
-> **Purpose**: 단순한 과제 제출용 리포지토리를 넘어, 테크 기업 백엔드/시스템 소프트웨어 엔지니어 채용 관점에서 기술적 깊이와 협업 역량을 증명하는 레퍼런스 포트폴리오 구축 전략.
+> **Purpose**: 단순한 과제 제출용 리포지토리를 넘어, 테크 기업 백엔드/시스템 소프트웨어 엔지니어 채용 관점에서 기술적 깊이와 협업 역량을 증명하는 레퍼런스 포트폴리오 구축 전략입니다.
 
 ---
 
 ## 1. Portfolio Philosophy: What Recruiters Look For
 
-채용 담당자와 시니어 엔지니어가 지원자의 깃허브 리포지토리를 평가할 때 가장 주목하는 4대 핵심 역량:
+채용 담당자와 시니어 엔지니어가 지원자의 깃허브 리포지토리를 평가할 때 가장 주목하는 4대 핵심 역량은 다음과 같습니다:
 
 ```mermaid
 graph TD
@@ -134,6 +134,6 @@ flowchart LR
 ```
 
 ### CI 검증 항목
-1. **Norminette Check**: 최신 42 Norminette 파이썬 패키지를 설치하고 전체 소스코드의 컨벤션 위반 검사.
-2. **Strict Compilation**: `cc -Wall -Wextra -Werror` 플래그 및 `make`, `make re`, `make bonus` 무결점 빌드 검사.
-3. **Memory Leak Gate**: Valgrind 환경에서 파이프라인, 리다이렉션, 에러 상황 테스트 시 힙 릭 0바이트(`definitely lost: 0`, `indirectly lost: 0`) 검증.
+1. **Norminette Check**: 최신 42 Norminette 파이썬 패키지를 설치하고 전체 소스코드의 컨벤션 위반을 검사합니다.
+2. **Strict Compilation**: `cc -Wall -Wextra -Werror` 플래그 및 `make`, `make re`, `make bonus` 무결점 빌드를 검사합니다.
+3. **Memory Leak Gate**: Valgrind 환경에서 파이프라인, 리다이렉션, 에러 상황 테스트 시 힙 릭 0바이트(`definitely lost: 0`, `indirectly lost: 0`)를 검증합니다.

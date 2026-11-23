@@ -10,9 +10,9 @@
 
 ## 1. 왜 빌트인(Builtin)은 외부 실행 파일이 될 수 없는가?
 
-리눅스나 macOS의 `/bin` 또는 `/usr/bin` 디렉토리를 보면 `echo`, `pwd`, `env` 같은 실행 파일이 실제로 존재함에도, 셸이 이를 굳이 내부 함수(Builtin)로 구현하고 특히 `cd`, `export`, `unset`, `exit`는 `fork()` 없이 **부모 셸 프로세스 자기 자신**에서 실행하는 이유가 무엇일까요?
+리눅스나 macOS의 `/bin` 또는 `/usr/bin` 디렉토리를 보면 `echo`, `pwd`, `env` 같은 실행 파일이 실제로 존재함에도, 셸이 이를 굳이 내부 함수(Builtin)로 구현하고 특히 `cd`, `export`, `unset`, `exit`는 `fork()` 없이 **부모 셸 프로세스 자기 자신**에서 실행하는 이유는 무엇입니까?
 
-그 해답은 운영체제 커널이 프로세스에게 제공하는 **두 가지 강력한 격리(Isolation)**에 있습니다.
+그 해답은 운영체제 커널이 프로세스에게 제공하는 **두 가지 격리(Isolation)**에 있습니다.
 
 ### 1.1 커널 PCB와 가상 메모리(CoW) 격리 메커니즘
 
@@ -102,7 +102,7 @@ C 언어에서 `long long` 타입 변수에 `acc = acc * 10 + digit`을 그대�
        return (OVERFLOW_ERROR);
    acc = acc * 10 + digit;
    ```
-4. 이 불등식은 단 한 번의 정수 래핑(Wrap-around)이나 UB 없이 64비트 전 범위의 경계값(`LLONG_MAX`, `LLONG_MIN`)을 수학적으로 완벽히 판별합니다.
+4. 이 불등식은 단 한 번의 정수 래핑(Wrap-around)이나 UB 없이 64비트 전 범위의 경계값(`LLONG_MAX`, `LLONG_MIN`)을 정확히 판별합니다.
 
 ---
 
