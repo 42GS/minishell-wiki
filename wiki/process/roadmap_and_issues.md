@@ -27,8 +27,8 @@ flowchart LR
         C4["#26 Feat: Recursive Descent AST (Done)"]
         C5["#27 Feat: Pipeline & Concurrency (Done)"]
         C6["#28 Feat: Redirection & Heredoc (Done)"]
-        C7["#29 Feat: 7 Builtins & Env (NEXT)"]
-        C8["#30 Feat: Signal Handling"]
+        C7["#29 Feat: 7 Builtins & Env (Done)"]
+        C8["#30 Feat: Signal Handling (NEXT)"]
         C9["#31 Bonus: Logic Ops and Subshell"]
         C10["#32 Bonus: Wildcard Globbing"]
         C11["#33 QA: Valgrind Zero Leaks"]
@@ -40,9 +40,9 @@ flowchart LR
     classDef current fill:#f57f17,stroke:#bc5100,color:#ffffff;
     classDef planned fill:#1565c0,stroke:#0d47a1,color:#ffffff;
 
-    class W1,W2,W3,W4,W5,W6,C1,C2,C3,C4,C5,C6 done;
-    class C7 current;
-    class C8,C9,C10,C11 planned;
+    class W1,W2,W3,W4,W5,W6,C1,C2,C3,C4,C5,C6,C7 done;
+    class C8 current;
+    class C9,C10,C11 planned;
 ```
 
 ---
@@ -74,8 +74,8 @@ flowchart LR
 | **#26** | `feat` &#124; P0: Critical | [FEAT] Implement Recursive Descent AST Parser & Syntax Validator | M2 | **CLOSED** | [01_parser_and_ast](../architecture/01_parser_and_ast.md) |
 | **#27** | `feat` &#124; P0: Critical | [FEAT] Implement Pipeline Execution Engine & Strict Pipe-Closing Protocol | M3 | **CLOSED** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#28** | `feat` &#124; P0: Critical | [FEAT] Implement Redirection Engine (<, >, >>, << Heredoc) | M3 | **CLOSED** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
-| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **OPEN (Next)** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
-| **#30** | `feat` &#124; P0: Critical | [FEAT] Implement Asynchronous Signal Handling & Terminal termios Control | M4 | **OPEN** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md) |
+| **#29** | `feat` &#124; P1: High | [FEAT] Implement 7 Builtin Commands & Environment Variable Management | M4 | **CLOSED** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
+| **#30** | `feat` &#124; P0: Critical | [FEAT] Implement Asynchronous Signal Handling & Terminal termios Control | M4 | **OPEN (Next)** | [03_signal_dispatcher_and_state_machine](../architecture/03_signal_dispatcher_and_state_machine.md) |
 | **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
 | **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
 | **#33** | `test` &#124; P0: Critical | [QA] Full Memory Leak (Valgrind) & Regression Hardening, Legacy Retrospective | M5 | **OPEN** | [evaluation_matrix](../requirements/evaluation_matrix.md), [allowed_functions_matrix](../concepts/allowed_functions_matrix.md) |
@@ -90,8 +90,8 @@ flowchart LR
    - 로컬 `~/Projects/gdtknight/42/minishell` 초기화, `.github/` 템플릿/CI 이식, No-relink `Makefile` 및 `libft` 구축 완료
    - 자동화 단위 테스트(`tests/unit/`) 및 42evalhub 비교 E2E 테스트 하네스(`tests/e2e/`) 구축 완료
    - GitHub Actions CI (Norminette + Strict Build + No-relink + Valgrind 0 leaks) Green 통과 확인
-3. **단계별 기능 구현 (Code Issue #25 ~ #33 - Next: #29 Builtins & Env)**:
-   - 토크나이저(#25 완료) -> 파서(#26 완료) -> 파이프라인(#27 완료) -> 리다이렉션/Heredoc(#28 완료, M3 달성) -> 빌트인(#29 진행 예정)/시그널(#30) -> 보너스(#31, #32) -> 최종 릭 제로 검증(#33)
+3. **단계별 기능 구현 (Code Issue #25 ~ #33 - Next: #30 Signal Handling)**:
+   - 토크나이저(#25 완료) -> 파서(#26 완료) -> 파이프라인(#27 완료) -> 리다이렉션/Heredoc(#28 완료) -> 빌트인(#29 완료) -> 시그널(#30 진행 예정) -> 보너스(#31, #32) -> 최종 릭 제로 검증(#33)
 
 ---
 
