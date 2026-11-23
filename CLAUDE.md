@@ -42,7 +42,7 @@
 - **GitHub Flow & PR-Only 브랜치 전략 (`main` 직접 작업 금지)**:
   - 모든 개별 이슈 작업은 `main` 브랜치에서 직접 커밋·푸시하지 않고, 반드시 이슈 번호 기반 작업 브랜치(`feat/<issue>-<desc>`, `fix/<issue>-<desc>`, `docs/<issue>-<desc>`)를 분기하여 진행한다.
   - 작업 완료 후 표준 PR 템플릿에 맞춰 Pull Request를 작성할 때 **필수 메타데이터(`--assignee gdtknight`, `--milestone`, `--label`)를 누락 없이 부여**하고, CI 품질 게이트(Norminette, Strict Build, Relink, Valgrind) 통과 후 `main`으로 머지한다.
-  - 이슈 종료(Close) 시 해당 이슈 본문의 완료 조건 체크박스(`- [ ]` -> `- [x]`)를 완료 상태로 동기화한다.
+  - PR 머지 및 이슈 종료(Close) 시 PR 본문의 CI/검증 체크박스와 해당 이슈 본문의 완료 조건 체크박스(`- [ ]` -> `- [x]`)를 모두 완료 상태로 동기화한다.
 - **이슈 연동 커밋 규칙**:
   - 모든 커밋 타이틀 맨 앞에 해당 리포지토리의 연관 이슈 번호를 `[#이슈번호]` 형태로 명시하여 추적성을 보장한다. (예: `[#25] feat(lexer): ...`)
   - 위키 저장소의 커밋은 반드시 `minishell-wiki`의 이슈 번호와 연결하고, 구현 저장소의 커밋은 반드시 `minishell`의 이슈 번호와 연결한다.
