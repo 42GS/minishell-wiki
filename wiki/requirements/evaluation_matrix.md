@@ -2,7 +2,7 @@
 
 > **Navigation**: [[index|Hub: Index]] | [[wiki/requirements/mandatory|Mandatory Spec]] | [[wiki/requirements/bonus|Bonus Spec]]  
 > **Source**: [[raw/evalhub/minishell_eval_scale|42 EvalHub Minishell Scale]]  
-> **Purpose**: 평가 시트의 모든 질문 및 채점 항목을 사전 검증하고 방어할 수 있도록 1:1 매핑한 체크리스트.
+> **Purpose**: 평가 시트의 모든 질문 및 채점 항목을 사전 검증하고 방어할 수 있도록 1:1 매핑한 체크리스트입니다.
 
 ---
 
@@ -26,7 +26,7 @@
 | **경로 탐색** | `Relative Path` & `Environment path` | `./my_script`<br/>`unset PATH` 후 `ls` 실행 시 `No such file or directory` 에러 확인<br/>`PATH` 복구 후 명령 실행 | PATH 파싱 탐색 및 상대 경로 실행 정확성 | [[wiki/architecture/02_execution_engine_and_ipc]] |
 | **리다이렉션** | `Redirection` | `echo hello > test.txt`<br/>`cat < test.txt`<br/>`echo world >> test.txt`<br/>`cat << EOF` heredoc 테스트 | 파일 입출력 redirection 및 heredoc 정상 종료 | [[wiki/architecture/02_execution_engine_and_ipc]] |
 | **파이프** | `Pipes` | `cat file &#124; grep word &#124; wc -l`<br/>파이프라인 프로세스 간 동시 실행 및 파이프 누수(FD leak) 방지 | 모든 자식 프로세스 정상 대기(`waitpid`), 파이프 닫힘 | [[wiki/concepts/deep_dive_process_ipc_and_fd]] |
-| **복합 검증** | `Go Crazy and history` | 긴 명령어, 복잡한 파이프라인, 비정상적 인자 조합 반복 실행<br/>방향키 위/아래로 history 정상 탐색 확인 | 세그폴트 및 메모리 릭 없이 완벽 동작 | [[wiki/architecture/01_parser_and_ast]] |
+| **복합 검증** | `Go Crazy and history` | 긴 명령어, 복잡한 파이프라인, 비정상적 인자 조합 반복 실행<br/>방향키 위/아래로 history 정상 탐색 확인 | 세그폴트 및 메모리 릭 없이 정상 동작 | [[wiki/architecture/01_parser_and_ast]] |
 
 ---
 

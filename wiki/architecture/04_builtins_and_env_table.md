@@ -123,13 +123,13 @@ int	execute_single_builtin(t_ast_node *cmd, t_shell *ctx)
 
 ### 4.2 `cd [path]`
 - **인자 개수 검증**:
-  - `argc == 1` (`cd`): `env_get(ctx->env, "HOME")` 값을 타겟 경로로 설정. `HOME`이 설정되지 않았으면 `minishell: cd: HOME not set\n` 출력 후 1 반환.
-  - `argc == 2`: `argv[1]`을 타겟 경로로 설정. (단, `argv[1]`이 빈 문자열 `""`인 경우 Bash는 현재 디렉토리 유지 후 0 반환)
-  - `argc > 2`: `minishell: cd: too many arguments\n` 출력 후 1 반환.
+  - `argc == 1` (`cd`): `env_get(ctx->env, "HOME")` 값을 타겟 경로로 설정합니다. `HOME`이 설정되지 않았으면 `minishell: cd: HOME not set\n` 출력 후 1을 반환합니다.
+  - `argc == 2`: `argv[1]`을 타겟 경로로 설정합니다. 단, `argv[1]`이 빈 문자열 `""`인 경우 Bash는 현재 디렉토리를 유지한 채 0을 반환합니다.
+  - `argc > 2`: `minishell: cd: too many arguments\n` 출력 후 1을 반환합니다.
 - **`chdir()` 및 환경변수 동기화**:
-  - `chdir(target) != 0` 시 `perror("minishell: cd: <target>")` 형식의 에러 출력 후 1 반환.
-  - 성공 시 `old_pwd = env_get(ctx->env, "PWD")` (또는 사전 저장된 `ctx->cwd`)를 `OLDPWD`로 업데이트.
-  - `getcwd(NULL, 0)`으로 새 절대 경로를 획득해 `PWD` 및 `ctx->cwd`를 업데이트. (`getcwd` 실패 시 기존 경로 문자열 조합 또는 에러 경고 출력)
+  - `chdir(target) != 0` 시 `perror("minishell: cd: <target>")` 형식의 에러를 출력하고 1을 반환합니다.
+  - 성공 시 `old_pwd = env_get(ctx->env, "PWD")` (또는 사전 저장된 `ctx->cwd`)를 `OLDPWD`로 업데이트합니다.
+  - `getcwd(NULL, 0)`으로 새 절대 경로를 획득해 `PWD` 및 `ctx->cwd`를 업데이트합니다. (`getcwd` 실패 시 기존 경로 문자열 조합 또는 에러 경고를 출력합니다.)
 
 ### 4.3 `pwd`
 - **동작**: `getcwd(NULL, 0)`을 호출하여 현재 물리적 작업 디렉토리의 절대 경로를 획득하고 `stdout`에 개행과 함께 출력한 뒤 할당된 버퍼를 `free()`합니다.
@@ -138,24 +138,24 @@ int	execute_single_builtin(t_ast_node *cmd, t_shell *ctx)
 ### 4.4 `export [name[=value] ...]`
 - **인자 없는 `export` (Sorted View)**:
   - `t_env_node` 리스트의 포인터 배열을 임시 생성해 ASCII 사전순(Bubble/Quick Sort)으로 정렬합니다. (원본 리스트의 순서 자체를 바꾸면 `env` 출력 순서가 변할 수 있으므로 포인터 배열만 정렬 후 즉시 해제!)
-  - 출력 형식: `value != NULL`이면 `declare -x KEY="VALUE"\n`, `value == NULL`이면 `declare -x KEY\n`.
+  - 출력 형식은 `value != NULL`이면 `declare -x KEY="VALUE"\n`, `value == NULL`이면 `declare -x KEY\n`입니다.
   - 만약 `value` 내부에 `"`, `$`, `\` 등이 있을 경우 Bash는 이스케이프 처리를 추가합니다.
 - **식별자(Identifier) 검증 규칙 (`is_valid_identifier`)**:
-  - `=` 기호 앞부분(키 이름)이 비어있거나(`=val`), 첫 글자가 영문자/언더스코어(`isalpha(c) || c == '_'`)가 아니면 무효.
-  - 두 번째 글자부터 `=`(또는 `+=`) 전까지 영숫자/언더스코어(`isalnum(c) || c == '_'`)가 아니면 무효.
+  - `=` 기호 앞부분(키 이름)이 비어 있거나(`=val`), 첫 글자가 영문자/언더스코어(`isalpha(c) || c == '_'`)가 아니면 무효로 판정합니다.
+  - 두 번째 글자부터 `=`(또는 `+=`) 전까지 영숫자/언더스코어(`isalnum(c) || c == '_'`)가 아니면 무효로 판정합니다.
   - 무효한 인자가 발견되면 `minishell: export: '<arg>': not a valid identifier\n`를 `stderr`에 출력하고 **루프를 중단하지 않고 다음 인자를 계속 처리**한 뒤, 최종 반환값을 `1`로 설정합니다.
 - **기존 변수 덮어쓰기 규칙**:
   - `export A=1` 후 `export A` (값 없음) 호출 시: 기존 값 `"1"`을 지우지 않고 **그대로 보존**합니다.
   - `export A=1` 후 `export A=2` 호출 시: 기존 값을 `"2"`로 교체합니다.
 
 ### 4.5 `unset [name ...]`
-- 인자가 없으면 아무 작업 없이 0 반환.
+- 인자가 없으면 아무 작업 없이 0을 반환합니다.
 - 각 인자 `name`을 리스트에서 탐색하여 일치하는 `t_env_node`의 `key`, `value`, 노드 메모리를 모두 해제하고 연결 리스트 포인터를 재연결합니다.
 - `PATH` 변수가 `unset`되면 즉시 외부 명령어 탐색이 불가능해지며 `No such file or directory` 또는 `command not found` 에러가 발생해야 합니다. ([[raw/evalhub/minishell_eval_scale|42 EvalHub Environment path]])
 
 ### 4.6 `env`
-- Subject 명시: *"env with no options or arguments"*.
-- 인자(`argv[1]`)가 들어온 경우: `env: '<arg>': No such file or directory` 또는 사용법 오류 출력 후 127(또는 1) 반환.
+- Subject 명세는 *"env with no options or arguments"*입니다.
+- 인자(`argv[1]`)가 들어온 경우 `env: '<arg>': No such file or directory` 또는 사용법 오류를 출력한 뒤 127(또는 1)을 반환합니다.
 - 리스트를 순회하며 **`node->value != NULL`인 노드만** `KEY=VALUE\n` 형식으로 출력합니다.
 
 ### 4.7 `exit [n]`
@@ -183,12 +183,12 @@ flowchart TD
 ```
 
 - **엄격한 64비트 수치 파서 (`ft_parse_exit_code`)**:
-  1. 앞뒤 공백(`' '`, `'\t'`, `'\n'`, `'\v'`, `'\f'`, `'\r'`) 스킵 허용. (단, 내부 공백 `"1 2"`는 비수치 에러!)
-  2. 선택적 단일 부호 `'+'` 또는 `'-'` 처리. (부호만 있고 숫자가 없으면 에러)
-  3. C 표준 Signed Overflow Undefined Behavior를 피하기 위해 `unsigned long long` 누산기 `acc`를 사용하고, 다음 자리 `d`를 더하기 전에 컷오프 검증:
+  1. 앞뒤 공백(`' '`, `'\t'`, `'\n'`, `'\v'`, `'\f'`, `'\r'`) 스킵을 허용합니다. 단, 내부 공백 `"1 2"`는 비수치 에러로 처리합니다.
+  2. 선택적 단일 부호 `'+'` 또는 `'-'`를 처리하며, 부호만 있고 숫자가 없으면 에러로 판정합니다.
+  3. C 표준 Signed Overflow Undefined Behavior를 피하기 위해 `unsigned long long` 누산기 `acc`를 사용하고, 다음 자리 `d`를 더하기 전에 컷오프 검증을 수행합니다:
      - 양수 한계: `LLONG_MAX` (`9223372036854775807ULL`)
      - 음수 절대값 한계: `(unsigned long long)LLONG_MAX + 1ULL` (`9223372036854775808ULL`)
-  4. 숫자 뒤에 공백 외의 문자(`42abc`)가 존재하면 실패 판정.
+  4. 숫자 뒤에 공백 외의 문자(`42abc`)가 존재하면 실패로 판정합니다.
 - **종료 전 완전 리소스 클린업**:
   - `exit` 실행 직전 `free_ast()`, `free_tokens()`, `free_env_list()`, `rl_clear_history()`, 백업 FD 닫기를 모두 실행하여 0 바이트 힙 누수를 보장합니다.
 

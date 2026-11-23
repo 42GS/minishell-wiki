@@ -10,7 +10,7 @@
 
 ## 1. Architectural Philosophy & Global Variable Isolation
 
-42 Minishell 서브젝트([[wiki/requirements/mandatory|Mandatory Spec]])는 시그널 처리에 대해 매우 강력하고 엄격한 제약을 부여합니다:
+42 Minishell 서브젝트([[wiki/requirements/mandatory|Mandatory Spec]])는 시그널 처리에 대해 엄격한 제약을 부여합니다:
 
 > [!CAUTION]
 > **"Avoid using more than one global variable to indicate a received signal... This global variable cannot provide any other information or data access than the number of a received signal."**

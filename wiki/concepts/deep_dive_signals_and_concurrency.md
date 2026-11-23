@@ -122,8 +122,8 @@ minishell$ cat
 
 ### 부모 셸의 방어 전략:
 1. 만약 부모 셸도 대화형 핸들러(`handle_sigint_interactive`)를 켜둔 채로 자식을 기다리면:
-   - `cat`도 죽고, 부모도 새 프롬프트를 화면에 뿌려버려 **프롬프트가 2중으로 겹치거나 화면이 깨지는 레이스 컨디션**이 발생합니다.
+   - `cat`도 죽고, 부모도 새 프롬프트를 화면에 뿌려 **프롬프트가 2중으로 겹치거나 화면이 깨지는 레이스 컨디션**이 발생합니다.
 2. 따라서 부모 셸은 자식을 `fork`한 직후, 자신의 시그널 처리를 `SIG_IGN`(무시)으로 변경하고 오직 `waitpid()`([[wiki/architecture/02_execution_engine_and_ipc|실행 엔진 wait_pipeline]])를 통해서만 자식의 종료 상태(`WIFSIGNALED`, `WTERMSIG`)를 관찰해야 합니다.
 3. 자식이 시그널로 죽었음이 확인되면 비로소 부모 셸은 개행(`\n`)을 한 번 출력하고 종료 코드를 $128 + 2 = \mathbf{130}$으로 설정한 뒤 대화형 모드로 복귀합니다.
 
-이것이 Bash([[raw/specs/bash_signals|Bash Signals Spec]])가 구현하고 있는 완벽한 시그널 제어의 표준 아키텍처입니다.
+이 흐름이 Bash([[raw/specs/bash_signals|Bash Signals Spec]])가 구현하고 있는 표준 시그널 제어 아키텍처입니다.
