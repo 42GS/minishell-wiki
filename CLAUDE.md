@@ -83,7 +83,8 @@ graph TD
   - `wiki/concepts/`: 시스템 콜 매트릭스, 컴파일러/OS/시그널 심화 학습(Deep Dive) 문서
   - `wiki/architecture/`: 파서/렉서 문법 설계, AST 구조, 실행 엔진, 시그널 상태 머신, 빌트인 설계
   - `templates/github/`: 구현 저장소(`.github/`)에 이식할 표준 Issue/PR 템플릿 및 CI 워크플로우
-  - *(예정)* `wiki/adr/` (아키텍처 결정 기록), `wiki/eval/` (방어 및 회귀 테스트 시나리오)
+  - `wiki/eval/`: 최종 회고록 및 구버전 비교 분석 보고서
+  - *(예정)* `wiki/adr/` (아키텍처 결정 기록)
 
 ### Layer 3: The Schema (`CLAUDE.md`)
 - 위키의 규칙, 디렉토리 규격, 운영 워크플로우를 정의한 단일 진실 공급원.
