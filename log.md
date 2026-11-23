@@ -208,6 +208,16 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `src/executor/executor.c` & `shell_utils.c`: 단일 빌트인 실행 시 `has_backup_fds`/`saved_in`/`saved_out` 추적 및 `exit` 호출 직전 클린업으로 Valgrind `--track-fds=yes` 0 누수 보장.
   - `tests/unit/test_builtins.c` & `run_e2e.py --ci` (15종 Bash 차등 스모크 체크) PASS, macOS `leaks` 0바이트 누수 확인.
 - **PR & Roadmap Sync**: `42GS/minishell#39` CI 통과(`Norminette Check` 12s + `Strict Build & Leak Verification` 23s) 후 머지 완료, `Issue #29` 자동 종료 (Next: `#30 Signal Handling`).
+
+## [2026-11-23] impl | Complete Code Issue #30: Signal Dispatcher & Terminal termios Control (PR #40)
+- **Context**: `42GS/minishell` `feat/30-signals` 브랜치에서 단일 전역 변수 `g_signal_num` 기반 4-상태 시그널 디스패처, `termios` `ECHOCTL` 제어, Fork 기반 Here-doc 시그널 중단 및 실제 PTY 통합 테스트 구현, PR 머지 완료 (M4 달성).
+- **Implementation Summary**:
+  - `src/signals/signals.c` & `signals_term.c`: `sigaction` 기반 `SIG_STATE_INTERACTIVE`/`EXECUTION`/`CHILD`/`HEREDOC` 상태 전환, `sync_signal_status` (`SIGINT`->130, `SIGQUIT`->131), `report_child_signal` (`Quit (core dumped)` 출력), `disable_echoctl` / `restore_terminal`.
+  - `src/executor/executor_wait.c`, `executor.c`, `executor_pipe.c`, `executor_pipe_child.c`: `EINTR` 재시도 루프(`wait_child_status`, `wait_pipeline`) 및 다중 파이프라인 단일 시그널 개행 출력 처리.
+  - `src/executor/executor_heredoc.c` & `executor_heredoc_child.c`: Forked Here-doc 자식에 `SIG_STATE_HEREDOC` 격리 적용(`Ctrl+C` 즉시 중단 후 `130` 복귀, `Ctrl+D` EOF 경고 출력).
+  - `src/main.c` & `tests/`: 대화형 `Ctrl+D` 시 `exit` 출력, `tests/unit/test_signals.c` 단위 테스트, `tests/e2e/test_signals_pty.py` 실제 PTY 시그널 7종 통합 테스트 및 CI 파이프라인 연동.
+  - `tests/unit/test_redir.c`: 포크된 Here-doc 자식이 `free_child_resources(ctx)` 시 AST를 해제할 수 있도록 `ctx->current_ast`에 파싱 결과 저장(Valgrind 0바이트 누수 달성).
+- **PR & Roadmap Sync**: `42GS/minishell#40` CI 통과(`Norminette Check` 13s + `Strict Build & Leak Verification` 23s, PTY·Valgrind 포함) 후 머지 완료, `Issue #30` 자동 종료 (M4 완료 -> M5 `#31` 진입).
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
