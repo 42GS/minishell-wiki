@@ -9,6 +9,7 @@
 
 | 문서 | 설명 | 위키 링크 |
 | :--- | :--- | :--- |
+| [README.md](README.md) | 저장소 포트폴리오 개요, 3-Layer LLM Wiki 아키텍처, 추천 열람 순서 및 정량 성과 요약 | [README](README.md) |
 | [CLAUDE.md](CLAUDE.md) | 위키 스키마 규격, 백엔드 포트폴리오 엔지니어링 표준, 운영 프로토콜 및 구버전 봉인 원칙 | [CLAUDE](CLAUDE.md) |
 | [log.md](log.md) | 위키 작업 히스토리 시계열 저널 (Ingest / Query / Lint / Refactor) | [log](log.md) |
 

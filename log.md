@@ -251,3 +251,10 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - **정량 개선**: 프로덕션 코어 `7,883` LOC -> `3,896` LOC(`-50.6%`), 전체 LOC `-51.8%`, 금지 심볼(`_getpid`, `_strcmp`) 및 2개 숨겨진 싱글턴 제거 -> 단일 `g_signal_num` + 허용 심볼 `33`종 준수, 5대 E2E 벤치마크 `20/37 (54.1%, 3 timeouts)` -> `37/37 (100.0%, 0 timeouts)`.
   - **정성 개선**: `sigaction` async-signal-safe 격리, `O_EXCL` 익명 Here-doc으로 파이프 데드락/EOF 크래시 제거, `t_strbuf` $O(N)$ 확장 및 인용 마스크 `*` Globbing, 18개 테스트 파일 및 4계층 CI 게이트 확립.
 - **Index, Schema & Roadmap Sync**: `index.md`(Section 6 신설), `CLAUDE.md`(`wiki/eval/` 정식 편입), `roadmap_and_issues.md`(`#31`, `#32`, `#33`, Wiki `#18` `CLOSED`) 현행화.
+
+## [2026-11-23] docs | Polish Portfolio READMEs, Metadata, Releases & GitHub Wikis (Wiki #20, Code #54)
+- **Context**: `42GS/minishell` 및 `42GS/minishell-wiki` 양쪽 저장소를 백엔드·시스템 엔지니어링 포트폴리오로 즉시 검토 가능하도록 저장소 메타데이터, `README.md`, `v1.0.0` GitHub Release 및 GitHub Wiki 문서를 보완.
+- **Updates Applied**:
+  - **GitHub Metadata**: 양 저장소 description·topics 정리 및 `42GS/minishell` GitHub Wiki 활성화.
+  - **`42GS/minishell` (`#54`)**: 배지, 아키텍처 다이어그램, 7대 모듈, 5대 설계 트레이드오프, 구버전 대비 정량 요약, 5계층 검증 가이드가 포함된 포트폴리오 `README.md` 고도화.
+  - **`42GS/minishell-wiki` (`#20`)**: 루트 `README.md` 신규 작성(3-Layer 구조, 추천 열람 순서, 카탈로그, 정량 성과, `lint_wiki.py` 검증 안내) 및 `index.md`·`log.md` 동기화.
