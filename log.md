@@ -218,30 +218,22 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `src/main.c` & `tests/`: 대화형 `Ctrl+D` 시 `exit` 출력, `tests/unit/test_signals.c` 단위 테스트, `tests/e2e/test_signals_pty.py` 실제 PTY 시그널 7종 통합 테스트 및 CI 파이프라인 연동.
   - `tests/unit/test_redir.c`: 포크된 Here-doc 자식이 `free_child_resources(ctx)` 시 AST를 해제할 수 있도록 `ctx->current_ast`에 파싱 결과 저장(Valgrind 0바이트 누수 달성).
 - **PR & Roadmap Sync**: `42GS/minishell#40` CI 통과(`Norminette Check` 13s + `Strict Build & Leak Verification` 23s, PTY·Valgrind 포함) 후 머지 완료, `Issue #30` 자동 종료 (M4 완료 -> M5 `#31` 진입).
-- **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
-- **Remote Issues Created on `42GS/minishell`**:
-  - **M1 (Architecture & Foundation)**:
-    - #1: `[FEAT] Knowledge Base & LLM Wiki Bootstrap` (Closed)
-    - #2: `[ARCH] Phase 1: Lexer, Parser & AST Architecture Design` (Closed)
-    - #3: `[ARCH] Phase 2: Execution Engine & IPC Pipeline Design` (Closed)
-    - #4: `[ARCH] Phase 3: Asynchronous Signal Dispatcher Design` (Closed)
-    - #5: `[INFRA] GitHub Engineering Infrastructure & Standards` (Closed)
-    - #6: `[ARCH] Phase 4: 7 Builtin Utilities & Environment Variable Engine Design` (Open - Next)
-    - #7: `[INFRA] Project Repository Initialization, Norminette CI, and Makefile Scaffolding` (Open)
-    - #8: `[TEST] Automated Test Suite Setup (FIRST Principles, AAA Pattern, Leak Detector)` (Open)
-  - **M2 (Lexer & Parser)**:
-    - #9: `[FEAT] Implement Lexer & Tokenizer DFA Engine` (Open)
-    - #10: `[FEAT] Implement Recursive Descent Parser & AST Builder` (Open)
-  - **M3 (Execution Engine & IPC)**:
-    - #11: `[FEAT] Implement Pipeline Execution & Multi-Process Concurrency` (Open)
-    - #12: `[FEAT] Implement Redirection & Heredoc Engine` (Open)
-  - **M4 (Builtins & Signals)**:
-    - #13: `[FEAT] Implement 7 Builtin Utilities & Environment Table` (Open)
-    - #14: `[FEAT] Implement Asynchronous Signal Dispatcher & State Machine` (Open)
-  - **M5 (Bonus & Full QA Hardening)**:
-    - #15: `[BONUS] Implement Logical Operators (&&, ||) & Subshell ( )` (Open)
-    - #16: `[BONUS] Implement Wildcard Expansion (*) via opendir/readdir` (Open)
-    - #17: `[QA] Full Memory Leak (Valgrind) & FD Leak Automated Verification` (Open)
-- **Artifacts Added**:
-  - `wiki/process/roadmap_and_issues.md`: 마일스톤 개요, 17개 이슈 1:1 위키 매핑 테이블, Mermaid 순서도, 다음 단계 액션 아이템 명시.
-- **Index Updated**: `index.md`에 `roadmap_and_issues.md` 등록.
+
+## [2026-11-23] impl | Complete M1-M4 Code Review Stabilization Batch (Code #41-#45, PR #46-#50)
+- **Context**: 필수 구현(M1~M4) 완료 기준 전체 코드 리뷰(`4,125` LOC)를 수행하고, 도출된 안정화·호환성·리팩토링 이슈 5건(`#41`~`#45`)을 `M5: Bonus & Hardening` 마일스톤으로 순차 해결.
+- **Fixes & Refactoring Merged**:
+  - **Issue #41 (PR #46)**: `executor_heredoc.c`의 Here-doc 임시 파일 `O_CREAT | O_EXCL`(`0600`) 적용, 정적 카운터 제거 및 `close_ast_heredocs()`로 파이프 형제 자식 간 FD 누수 제거.
+  - **Issue #42 (PR #47)**: `expander_split.c`, `expander_cmd.c` 추가 — 비인용 확장 IFS 단어 분할, `ambiguous redirect` 검출, `$"..."`/`$'...'`/`$0`/`$1`..`$9` Bash 호환성, `export K=$V` 비분할 규칙 적용.
+  - **Issue #43 (PR #48)**: `executor_path.c`, `executor_path_utils.c` — POSIX 빈 `PATH` 세그먼트(`.`) 처리, `!S_ISDIR` 디렉터리 필터링, `.`/`..`(`127`) 및 첫 비실행 정규 파일(`126 Permission denied`) 처리.
+  - **Issue #44 (PR #49)**: `TOK_AMP` 추가(`&&&`/`&` 구문 오류 코드 `2`), 렉서/파서 OOM·`NULL` 방어(`ft_strdup(NULL)` 포함), 파이프/백업 `dup2()` 및 `pwd`/`env`/`export` `write()` 검사, `SHLVL` 후행 공백 허용.
+  - **Issue #45 (PR #50)**: `libft/src/ft_strbuf.c`(`t_strbuf` 2배 용량 확장) 도입으로 $O(N^2)$ 재할당 제거, `step_quote()`/`parse_single_redir()` DRY 통합, `parse_shlvl_val()`/`parse_exit_digits()` 복잡도 축소, `04_builtins.json` 크로스플랫폼 정비.
+- **Verification**: 전 PR에서 GitHub Actions CI(`Norminette & Strict Build`, `Unit, E2E & Valgrind Leak Audit`) 0바이트·0 FD 누수 통과 후 체크박스 동기화 및 머지 완료.
+
+## [2026-11-23] lint | Sync Dual-Repo Roadmap & Perform Wiki Health Audit (Wiki #16)
+- **Context**: 코드 리뷰 안정화 배치(`#41`~`#45`) 반영 및 전체 위키 건전성 감사(Operations Protocol 3.3).
+- **Updates Applied**:
+  - `wiki/process/roadmap_and_issues.md`: Mermaid 다이어그램 및 양쪽 리포지토리 이슈 테이블(`#41`~`#45` `CLOSED`, Wiki `#16`) 현행화.
+  - `log.md`: 하단에 잔존하던 구버전 17개 이슈 고아 이력 블록(221~247행) 제거 및 `#41`~`#45`, Wiki `#16` 작업 일지 추가.
+  - `index.md`: `roadmap_and_issues.md` 설명의 구버전(`17개 GitHub 이슈`) 문구를 듀얼 리포지토리 표기로 정정.
+  - `CLAUDE.md`: PR 본문 CI 체크박스와 이슈 완료 조건 체크박스 동시 동기화 규칙 명시.
+- **Lint Audit Result**: `python3 scripts/lint_wiki.py` 실행 결과 `0 lint errors, 0 orphan pages, 0 unresolved links` 달성.
