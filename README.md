@@ -1,7 +1,7 @@
 # Minishell Architecture Knowledge Base & Engineering Wiki
 
 [![Wiki Health Lint](https://github.com/42GS/minishell-wiki/actions/workflows/wiki-lint.yml/badge.svg)](https://github.com/42GS/minishell-wiki/actions/workflows/wiki-lint.yml)
-[![Release](https://img.shields.io/github/v/release/42GS/minishell-wiki)](https://github.com/42GS/minishell-wiki/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/github/v/release/42GS/minishell-wiki)](https://github.com/42GS/minishell-wiki/releases/latest)
 [![Implementation Repo](https://img.shields.io/badge/Implementation-42GS%2Fminishell-blue)](https://github.com/42GS/minishell)
 [![Specs](https://img.shields.io/badge/Standard-POSIX.1--2017%20%2F%20GNU%20Bash-lightgrey)](raw/specs/bash_builtins.md)
 

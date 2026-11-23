@@ -20,6 +20,7 @@ flowchart LR
         W6["#6 Phase 4: Builtins/Env Arch (Done)"]
         W7["#16 Lint: Sync #41-#45 and Audit (Done)"]
         W8["#18 Retro: Legacy Comparison (Done)"]
+        W9["#20/#22 Portfolio README and Wiki CI (Done)"]
     end
 
     subgraph CODE_REPO["Repository: 42GS/minishell"]
@@ -35,13 +36,14 @@ flowchart LR
         C9["#31 Bonus: Logic Ops and Subshell (Done)"]
         C10["#32 Bonus: Wildcard Globbing (Done)"]
         C11["#33 QA: Valgrind and Retro (Done)"]
+        C12["#54-#60 Docs: Doxygen and GHCR CI (Done)"]
     end
 
     WIKI_REPO -->|Architectural Blueprints and Specifications| CODE_REPO
 
     classDef done fill:#2e7d32,stroke:#1b5e20,color:#ffffff;
 
-    class W1,W2,W3,W4,W5,W6,W7,W8,C1,C2,C3,C4,C5,C6,C7,C8,C8b,C9,C10,C11 done;
+    class W1,W2,W3,W4,W5,W6,W7,W8,W9,C1,C2,C3,C4,C5,C6,C7,C8,C8b,C9,C10,C11,C12 done;
 ```
 
 ---
@@ -60,6 +62,8 @@ flowchart LR
 | **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **CLOSED** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md), [deep_dive_builtins_and_environment](../concepts/deep_dive_builtins_and_environment.md) |
 | **#16** | `lint` &#124; P1: High | [LINT] Sync Stabilization Batch (#41-#45) & Perform Wiki Health Audit | M2 | **CLOSED** | [roadmap_and_issues](roadmap_and_issues.md), [log](../../log.md) |
 | **#18** | `retro` &#124; P0: Critical | [RETRO] Legacy Comparison Retrospective (minishell-old vs minishell) & Final Roadmap Sync | M3 | **CLOSED** | [legacy_retrospective](../eval/legacy_retrospective.md), [log](../../log.md) |
+| **#20** | `docs` &#124; P1: High | [Docs] Create Portfolio README and Synchronize Wiki Catalog | M3 | **CLOSED** | [README](../../README.md), [index](../../index.md) |
+| **#22** | `infra` &#124; P1: High | [CI] Use System python3 and Concurrency in wiki-lint Workflow | M3 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md), [log](../../log.md) |
 
 ---
 
@@ -85,6 +89,10 @@ flowchart LR
 | **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **CLOSED** | [bonus](../requirements/bonus.md) |
 | **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **CLOSED** | [bonus](../requirements/bonus.md) |
 | **#33** | `test` &#124; P0: Critical | [QA] Full Memory Leak (Valgrind) & Regression Hardening, Legacy Retrospective | M5 | **CLOSED** | [evaluation_matrix](../requirements/evaluation_matrix.md), [allowed_functions_matrix](../concepts/allowed_functions_matrix.md), [legacy_retrospective](../eval/legacy_retrospective.md) |
+| **#54** | `docs` &#124; P1: High | [Docs] Upgrade Portfolio README (Architecture, Trade-offs, Quantitative Metrics) | M5 | **CLOSED** | [legacy_retrospective](../eval/legacy_retrospective.md), [log](../../log.md) |
+| **#56** | `docs` &#124; P2: Normal | [Docs] Add Norminette-compliant Doxygen Comments Across All 58 Production Files | M5 | **CLOSED** | [01_parser_and_ast](../architecture/01_parser_and_ast.md), [log](../../log.md) |
+| **#58** | `infra` &#124; P2: Normal | [CI] Build and Publish Lightweight GHCR Custom CI Image | M5 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md), [log](../../log.md) |
+| **#60** | `infra` &#124; P2: Normal | [CI] Switch CI Pipeline to GHCR Image and Parallelize Unit & Valgrind QA | M5 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md), [log](../../log.md) |
 
 ---
 
@@ -98,6 +106,10 @@ flowchart LR
    - GitHub Actions CI (Norminette + Strict Build + No-relink + Valgrind 0 leaks) Green 통과 확인
 3. **전체 구현·안정화·보너스·QA 100% 완료 (Code Issue #25 ~ #33, #41 ~ #45 - ALL CLOSED)**:
    - 토크나이저(#25 완료) -> 파서(#26 완료) -> 파이프라인(#27 완료) -> 리다이렉션/Heredoc(#28 완료) -> 빌트인(#29 완료) -> 시그널(#30 완료, M4 달성) -> 코드 리뷰 안정화(#41~#45 완료, PR #46~#50) -> 보너스(#31, #32 완료, PR #51~#52) -> Valgrind/FD QA 및 구버전 회고(#33, Wiki #18 완료, PR #53)
+4. **포트폴리오 고도화, 코드 Doxygen 문서화 & CI 병렬 최적화 (Code #54 ~ #60, Wiki #20, #22 - ALL CLOSED)**:
+   - 양 저장소 포트폴리오 `README.md`, `v1.0.0`~`v1.1.0` Release 및 GitHub Wiki 발행 완료
+   - 전체 58개 파일 Norminette 준수 영문 Doxygen 주석 적용(`#56`, 실행 코드 변경 `0`건)
+   - GHCR 커스텀 이미지(`ghcr.io/42gs/minishell-ci`), Job/Unit/Valgrind 병렬화로 CI 속도 **`77~80s -> 29~36s`**(`-62.3%`) 및 Wiki Lint **`12~15s -> 9~10s`** 단축 달성
 
 ---
 
