@@ -258,3 +258,11 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - **GitHub Metadata**: 양 저장소 description·topics 정리 및 `42GS/minishell` GitHub Wiki 활성화.
   - **`42GS/minishell` (`#54`)**: 배지, 아키텍처 다이어그램, 7대 모듈, 5대 설계 트레이드오프, 구버전 대비 정량 요약, 5계층 검증 가이드가 포함된 포트폴리오 `README.md` 고도화.
   - **`42GS/minishell-wiki` (`#20`)**: 루트 `README.md` 신규 작성(3-Layer 구조, 추천 열람 순서, 카탈로그, 정량 성과, `lint_wiki.py` 검증 안내) 및 `index.md`·`log.md` 동기화.
+
+## [2026-11-24] ci | Add Codebase Doxygen Docs & Optimize Dual-Repo CI Pipelines (Code #56-#60, Wiki #22)
+- **Context**: 코드 가독성 강화를 위한 전 파일 Doxygen 주석 적용 및 GitHub Actions API 계측 기반 CI 실행 속도 최적화 수행.
+- **Updates Merged**:
+  - **Codebase Doxygen (`42GS/minishell#56`, PR `#57`)**: 58개 전 파일(`include/`, `libft/`, `src/`)에 GlobalScope 78자 이하 42 Norminette 준수 영문 `/** ... */` 주석 추가(실행 코드 변경 `0`건 검증, `Norminette` `12s` · `Build/QA` `1m1s` 통과) 및 `v1.0.1` 릴리스 발행.
+  - **GHCR 커스텀 CI 이미지 (`42GS/minishell#58`, PR `#59`)**: `.github/docker/Dockerfile`(`debian:bookworm-slim` + `libc6-dbg` + `valgrind` 자가 검증) 및 `.github/workflows/ci-image.yml` 구축, `ghcr.io/42gs/minishell-ci:latest` 발행.
+  - **CI·테스트 병렬화 (`42GS/minishell#60`, PR `#61`)**: `needs: norminette` 제거 및 GHCR 컨테이너 전환, `run_unit.sh` `obj/**/*.o` 정적 아카이브 링크(`11s -> 4s`), `run_valgrind_qa.sh` 13종 멀티코어 병렬화 및 Valgrind 3.19 `--log-file` FD 3 오탐 필터링 적용. 전체 CI **`77~80s -> 29~36s` (최대 -62.3%)** 단축.
+  - **Wiki CI 경량화 (`42GS/minishell-wiki#22`, PR `#23`)**: `actions/setup-python@v5` 제거(시스템 `python3` 사용) 및 `concurrency` 추가로 `Wiki Health Lint` 실행 시간 **`9~12s -> 4~6s`** 단축.
