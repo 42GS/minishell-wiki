@@ -237,3 +237,17 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `index.md`: `roadmap_and_issues.md` 설명의 구버전(`17개 GitHub 이슈`) 문구를 듀얼 리포지토리 표기로 정정.
   - `CLAUDE.md`: PR 본문 CI 체크박스와 이슈 완료 조건 체크박스 동시 동기화 규칙 명시.
 - **Lint Audit Result**: `python3 scripts/lint_wiki.py` 실행 결과 `0 lint errors, 0 orphan pages, 0 unresolved links` 달성.
+
+## [2026-11-23] impl | Complete Bonus & Final Valgrind/FD QA Gate (Code #31-#33, PR #51-#53)
+- **Context**: `42GS/minishell` 보너스 기능(`&&`, `||`, `( )`, `*`) 완성 및 42evalhub·Valgrind 0-Leak·0-FD QA 게이트 구축 완료.
+- **Implementations Merged**:
+  - **Issue #31 (PR #51)**: `ctx->interrupted` 기반 `&&`/`||` 리스트 `SIGINT` 단락 중단(Bash 호환), `close_ast_heredocs(node, skip)` 서브셸 형제 FD 격리, 단위·40종 스모크·8종 PTY 회귀 테스트 통과.
+  - **Issue #32 (PR #52)**: `expander_glob.c` 추가 — 인용 마스크(`t_exp_buf.mask`) 기반 `opendir`/`readdir`/`closedir` CWD `*` Globbing(ASCII 정렬, 숨김 파일·`/` 예외, 폴백), `test_wildcard_globbing` 및 5대 E2E 스위트 `37/37` 통과.
+  - **Issue #33 Stage 1 (PR #53)**: `tests/e2e/run_valgrind_qa.sh` 추가(Mandatory+Bonus+Error 13종 Valgrind/FD QA), `execute_single_builtin` 무리다이렉션 `dup` 생략 최적화, `ci.yml`에 `run_e2e.py --all` + 13종 Valgrind/FD QA 게이트 통합(`Norminette` 15s, `Strict Build & Leak Verification` 3m34s 통과), `README.md` 현행화.
+
+## [2026-11-23] retro | Complete Legacy Comparison Retrospective & Close Project (Wiki #18, Code #33)
+- **Context**: 필수·안정화·보너스·Valgrind QA가 CI 포함 100% 완료됨에 따라, 봉인되어 있던 `42GS/minishell-old.git`과 정량·정성 비교 회고를 수행하고 프로젝트 마감.
+- **Retrospective Highlights (`wiki/eval/legacy_retrospective.md`)**:
+  - **정량 개선**: 프로덕션 코어 `7,883` LOC -> `3,896` LOC(`-50.6%`), 전체 LOC `-51.8%`, 금지 심볼(`_getpid`, `_strcmp`) 및 2개 숨겨진 싱글턴 제거 -> 단일 `g_signal_num` + 허용 심볼 `33`종 준수, 5대 E2E 벤치마크 `20/37 (54.1%, 3 timeouts)` -> `37/37 (100.0%, 0 timeouts)`.
+  - **정성 개선**: `sigaction` async-signal-safe 격리, `O_EXCL` 익명 Here-doc으로 파이프 데드락/EOF 크래시 제거, `t_strbuf` $O(N)$ 확장 및 인용 마스크 `*` Globbing, 18개 테스트 파일 및 4계층 CI 게이트 확립.
+- **Index, Schema & Roadmap Sync**: `index.md`(Section 6 신설), `CLAUDE.md`(`wiki/eval/` 정식 편입), `roadmap_and_issues.md`(`#31`, `#32`, `#33`, Wiki `#18` `CLOSED`) 현행화.

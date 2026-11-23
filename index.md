@@ -56,7 +56,15 @@
 
 ---
 
-## 6. Raw Sources Registry (불변 원문 소스 보관소)
+## 6. Evaluation & Retrospective (평가 및 최종 회고)
+
+| 문서 | 설명 | 위키 링크 |
+| :--- | :--- | :--- |
+| [legacy_retrospective.md](wiki/eval/legacy_retrospective.md) | **[최종 회고]** `minishell-old` vs `minishell` 정량 지표(LOC·심볼·37종 E2E 벤치마크) 및 5대 아키텍처 개선 회고 | [Legacy Comparison Retrospective](wiki/eval/legacy_retrospective.md) |
+
+---
+
+## 7. Raw Sources Registry (불변 원문 소스 보관소)
 
 | 분류 | 소스 명 | 설명 | 위키 링크 |
 | :--- | :--- | :--- | :--- |

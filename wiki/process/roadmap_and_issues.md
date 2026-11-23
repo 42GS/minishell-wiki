@@ -19,6 +19,7 @@ flowchart LR
         W5["#5 GitHub Standards & Infra"]
         W6["#6 Phase 4: Builtins/Env Arch (Done)"]
         W7["#16 Lint: Sync #41-#45 and Audit (Done)"]
+        W8["#18 Retro: Legacy Comparison (Done)"]
     end
 
     subgraph CODE_REPO["Repository: 42GS/minishell"]
@@ -31,20 +32,16 @@ flowchart LR
         C7["#29 Feat: 7 Builtins & Env (Done)"]
         C8["#30 Feat: Signal Handling (Done)"]
         C8b["#41-#45 Stabilize: Review and Refactor (Done)"]
-        C9["#31 Bonus: Logic Ops and Subshell (NEXT)"]
-        C10["#32 Bonus: Wildcard Globbing"]
-        C11["#33 QA: Valgrind Zero Leaks"]
+        C9["#31 Bonus: Logic Ops and Subshell (Done)"]
+        C10["#32 Bonus: Wildcard Globbing (Done)"]
+        C11["#33 QA: Valgrind and Retro (Done)"]
     end
 
     WIKI_REPO -->|Architectural Blueprints and Specifications| CODE_REPO
 
     classDef done fill:#2e7d32,stroke:#1b5e20,color:#ffffff;
-    classDef current fill:#f57f17,stroke:#bc5100,color:#ffffff;
-    classDef planned fill:#1565c0,stroke:#0d47a1,color:#ffffff;
 
-    class W1,W2,W3,W4,W5,W6,W7,C1,C2,C3,C4,C5,C6,C7,C8,C8b done;
-    class C9 current;
-    class C10,C11 planned;
+    class W1,W2,W3,W4,W5,W6,W7,W8,C1,C2,C3,C4,C5,C6,C7,C8,C8b,C9,C10,C11 done;
 ```
 
 ---
@@ -62,6 +59,7 @@ flowchart LR
 | **#5** | `infra` &#124; P1: High | [INFRA] GitHub Engineering Standards, Issue/PR Templates & CI Specification | M1 | **CLOSED** | [github_engineering_standards](github_engineering_standards.md) |
 | **#6** | `arch` &#124; P0: Critical | [ARCH] Phase 4: 7 Builtin Utilities Specification & Environment Variable Engine Design | M1 | **CLOSED** | [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md), [deep_dive_builtins_and_environment](../concepts/deep_dive_builtins_and_environment.md) |
 | **#16** | `lint` &#124; P1: High | [LINT] Sync Stabilization Batch (#41-#45) & Perform Wiki Health Audit | M2 | **CLOSED** | [roadmap_and_issues](roadmap_and_issues.md), [log](../../log.md) |
+| **#18** | `retro` &#124; P0: Critical | [RETRO] Legacy Comparison Retrospective (minishell-old vs minishell) & Final Roadmap Sync | M3 | **CLOSED** | [legacy_retrospective](../eval/legacy_retrospective.md), [log](../../log.md) |
 
 ---
 
@@ -84,22 +82,22 @@ flowchart LR
 | **#43** | `fix` &#124; P1: High | [BUG] Fix PATH Resolution Edge Cases (Empty Segments, Directory Filtering, ./.. & EACCES 126) | M5 | **CLOSED** | [02_execution_engine_and_ipc](../architecture/02_execution_engine_and_ipc.md) |
 | **#44** | `fix` &#124; P1: High | [BUG] Harden Lexer/Parser Error Paths (&&&, OOM/NULL Guards) and Unchecked Syscalls | M5 | **CLOSED** | [01_parser_and_ast](../architecture/01_parser_and_ast.md), [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
 | **#45** | `refactor` &#124; P2: Normal | [REFACTOR] Eliminate O(N^2) String Reallocation, Deduplicate Quote/Redir Helpers & Reduce Complexity | M5 | **CLOSED** | [01_parser_and_ast](../architecture/01_parser_and_ast.md), [04_builtins_and_env_table](../architecture/04_builtins_and_env_table.md) |
-| **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **OPEN (Next)** | [bonus](../requirements/bonus.md) |
-| **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **OPEN** | [bonus](../requirements/bonus.md) |
-| **#33** | `test` &#124; P0: Critical | [QA] Full Memory Leak (Valgrind) & Regression Hardening, Legacy Retrospective | M5 | **OPEN** | [evaluation_matrix](../requirements/evaluation_matrix.md), [allowed_functions_matrix](../concepts/allowed_functions_matrix.md) |
+| **#31** | `bonus` &#124; P1: High | [BONUS] Implement Logical Operators (&&, &#124;&#124;) and Subshells ( ) | M5 | **CLOSED** | [bonus](../requirements/bonus.md) |
+| **#32** | `bonus` &#124; P1: High | [BONUS] Implement Wildcard Globbing (*) for Current Working Directory | M5 | **CLOSED** | [bonus](../requirements/bonus.md) |
+| **#33** | `test` &#124; P0: Critical | [QA] Full Memory Leak (Valgrind) & Regression Hardening, Legacy Retrospective | M5 | **CLOSED** | [evaluation_matrix](../requirements/evaluation_matrix.md), [allowed_functions_matrix](../concepts/allowed_functions_matrix.md), [legacy_retrospective](../eval/legacy_retrospective.md) |
 
 ---
 
 ## 4. Work Execution Roadmap
 
-1. **위키 설계 완료 (Wiki Issue #1 ~ #6)**:
-   - Phase 1~4 아키텍처 및 심화 개념 문서 전수 작성 완료
+1. **위키 설계 완료 (Wiki Issue #1 ~ #6, #16, #18 - ALL CLOSED)**:
+   - Phase 1~4 아키텍처 및 심화 개념 문서 전수 작성, 안정화 감사(`#16`) 및 최종 구버전 비교 회고(`#18`) 완료
 2. **코드 리포지토리 구축 및 테스트 셋업 완료 (Code Issue #23, #24 - CLOSED)**:
    - 로컬 `~/Projects/gdtknight/42/minishell` 초기화, `.github/` 템플릿/CI 이식, No-relink `Makefile` 및 `libft` 구축 완료
    - 자동화 단위 테스트(`tests/unit/`) 및 42evalhub 비교 E2E 테스트 하네스(`tests/e2e/`) 구축 완료
    - GitHub Actions CI (Norminette + Strict Build + No-relink + Valgrind 0 leaks) Green 통과 확인
-3. **단계별 기능 구현 (Code Issue #25 ~ #33, #41 ~ #45 - Next: #31 Bonus: Logic Ops & Subshell)**:
-   - 토크나이저(#25 완료) -> 파서(#26 완료) -> 파이프라인(#27 완료) -> 리다이렉션/Heredoc(#28 완료) -> 빌트인(#29 완료) -> 시그널(#30 완료, M4 달성) -> 코드 리뷰 안정화(#41~#45 완료, PR #46~#50) -> 보너스(#31 진행 예정, #32) -> 최종 릭 제로 검증(#33)
+3. **전체 구현·안정화·보너스·QA 100% 완료 (Code Issue #25 ~ #33, #41 ~ #45 - ALL CLOSED)**:
+   - 토크나이저(#25 완료) -> 파서(#26 완료) -> 파이프라인(#27 완료) -> 리다이렉션/Heredoc(#28 완료) -> 빌트인(#29 완료) -> 시그널(#30 완료, M4 달성) -> 코드 리뷰 안정화(#41~#45 완료, PR #46~#50) -> 보너스(#31, #32 완료, PR #51~#52) -> Valgrind/FD QA 및 구버전 회고(#33, Wiki #18 완료, PR #53)
 
 ---
 
