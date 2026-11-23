@@ -199,6 +199,15 @@ Format: `## [YYYY-MM-DD] <Operation> | <Title>`
   - `src/expander/expander.c` & `expander_utils.c`: 따옴표 상태 기반 환경변수 및 종료 상태(`&#36;VAR`, `&#36;?`) 확장, Quote Removal, Here-doc 본문 따옴표 보존 변수 확장, `t_ast_node->is_expanded` 이중 확장 방지.
   - `tests/unit/test_redir.c` 및 `run_e2e.py --ci` (8종 Bash 1:1 비교) PASS, Valgrind 0바이트/0 FD 누수.
 - **PR & Roadmap Sync**: `42GS/minishell#38` CI 통과 후 머지 완료, `Issue #28` 자동 종료 (M3 완료 -> M4 진입).
+
+## [2026-11-23] impl | Complete Code Issue #29: 7 Builtins & Environment Variable Engine (PR #39)
+- **Context**: `42GS/minishell` `feat/29-builtins-and-env` 브랜치에서 `t_env_node` 환경변수 딕셔너리 관리 계층 및 7대 빌트인 유틸리티(`echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`) 구현, PR 머지 완료.
+- **Implementation Summary**:
+  - `src/env/env_ops.c` & `env_init.c`: `env_set`/`env_unset` (값 없음 `NULL` 보존 및 빈 값 `""` 구분), 시작 시 `PWD`/`OLDPWD`(`NULL`)/`SHLVL` 자동 초기화.
+  - `src/builtins/`: `builtins.c` (디스패처), `builtin_echo.c` (`-n`, `-nnnn` 연속 파싱), `builtin_cd.c` (`HOME`, `OLDPWD` `-`, `PWD` 갱신), `builtin_pwd.c` (`getcwd` + `ctx->cwd` 폴백), `builtin_export.c` & `builtin_export_print.c` (ASCII 정렬 출력, 이스케이프, 식별자 검증, `+=` 추가), `builtin_unset.c`, `builtin_env.c`, `builtin_exit.c` (UB 없는 64비트 오버플로 컷오프 파서 `parse_exit_code`, 다중 인자 비종료).
+  - `src/executor/executor.c` & `shell_utils.c`: 단일 빌트인 실행 시 `has_backup_fds`/`saved_in`/`saved_out` 추적 및 `exit` 호출 직전 클린업으로 Valgrind `--track-fds=yes` 0 누수 보장.
+  - `tests/unit/test_builtins.c` & `run_e2e.py --ci` (15종 Bash 차등 스모크 체크) PASS, macOS `leaks` 0바이트 누수 확인.
+- **PR & Roadmap Sync**: `42GS/minishell#39` CI 통과(`Norminette Check` 12s + `Strict Build & Leak Verification` 23s) 후 머지 완료, `Issue #29` 자동 종료 (Next: `#30 Signal Handling`).
 - **Context**: 사용자 요청에 따라 GitHub 원격 리포지토리(`42GS/minishell`)에 5개 마일스톤(M1~M5) 및 17개 표준 이슈 전수 등록 및 추적 체계 확립.
 - **Remote Issues Created on `42GS/minishell`**:
   - **M1 (Architecture & Foundation)**:
