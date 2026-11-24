@@ -2,7 +2,7 @@
 
 > **Navigation**: [[index|Hub: Index]] | [[wiki/requirements/mandatory|Mandatory Spec]] | [[wiki/requirements/bonus|Bonus Spec]]  
 > **Source**: [[raw/evalhub/minishell_eval_scale|42 EvalHub Minishell Scale]]  
-> **Purpose**: 평가 시트의 모든 질문 및 채점 항목을 사전 검증하고 방어할 수 있도록 1:1 매핑한 체크리스트입니다.
+> **Purpose**: 평가 시트 질문 및 채점 항목 1:1 사전 검증·방어 체크리스트
 
 ---
 

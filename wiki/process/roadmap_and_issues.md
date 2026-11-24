@@ -1,7 +1,7 @@
 # Minishell Project Roadmap & Dual-Repository Issue Tracking
 
 > **Dual-Repository Architecture & Issue Tracking Strategy**  
-> 42 Minishell 프로젝트는 백엔드 시스템 엔지니어링 표준에 따라 **지식베이스(위키/설계)**와 **프로덕션 소스 코드(C 언어 구현)**를 두 개의 독립된 GitHub 리포지토리로 엄격히 분리하여 관리합니다.  
+> **지식베이스(위키/설계)**와 **프로덕션 소스 코드(C 구현)**를 두 개의 독립 GitHub 리포지토리로 분리 관리  
 > - **위키/설계 리포지토리**: [42GS/minishell-wiki](https://github.com/42GS/minishell-wiki)  
 > - **코드 구현 리포지토리**: [42GS/minishell](https://github.com/42GS/minishell)
 
@@ -50,7 +50,7 @@ flowchart LR
 
 ## 2. Wiki & Architecture Issues (`42GS/minishell-wiki`)
 
-`minishell-wiki` 리포지토리의 모든 커밋 타이틀은 아래 이슈 번호(`[#1]`, `[#2]`, ...)와 1:1로 직접 연결됩니다.
+`minishell-wiki` 커밋 타이틀의 이슈 번호(`[#1]`, `[#2]`, ...) 1:1 연결 규격:
 
 | Issue # | Type / Priority | Title | Milestone | Status | Related Wiki Spec |
 | :---: | :--- | :--- | :--- | :---: | :--- |
@@ -69,7 +69,7 @@ flowchart LR
 
 ## 3. Implementation & QA Issues (`42GS/minishell`)
 
-실제 C 언어 소스 코드 리포지토리(`~/Projects/gdtknight/42/minishell`)에서 브랜치 작업 및 Conventional Commits로 추적할 구현 이슈들입니다.
+C 소스 코드 리포지토리(`~/Projects/gdtknight/42/minishell`) 브랜치 및 Conventional Commits 추적 이슈 목록:
 
 | Issue # | Type / Priority | Title | Milestone | Status | Preceding Wiki Architecture |
 | :---: | :--- | :--- | :--- | :---: | :--- |

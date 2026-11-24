@@ -5,8 +5,8 @@
 [![Implementation Repo](https://img.shields.io/badge/Implementation-42GS%2Fminishell-blue)](https://github.com/42GS/minishell)
 [![Standard](https://img.shields.io/badge/Standard-POSIX.1--2017%20%2F%20GNU%20Bash-lightgrey)](raw/specs/bash_builtins.md)
 
-[`42GS/minishell`](https://github.com/42GS/minishell) C 구현에 앞서 확정한 아키텍처 명세, CS 원리 정리, 평가 방어 매트릭스, 구버전 비교 회고록을 분리 관리하는 저장소입니다.  
-모든 문서는 PR 단위 리뷰와 7단계 자동 린터(`scripts/lint_wiki.py`)를 거쳐 일관성을 유지합니다.
+[`42GS/minishell`](https://github.com/42GS/minishell) C 구현에 앞서 확정한 아키텍처 명세, CS 원리 정리, 평가 방어 매트릭스, 구버전 비교 회고록 분리 관리 저장소.  
+모든 문서 변경 시 PR 리뷰 및 7단계 자동 린터(`scripts/lint_wiki.py`) 통과 필수.
 
 - **구현 저장소**: [42GS/minishell](https://github.com/42GS/minishell)
 - **요약 GitHub Wiki**: [42GS/minishell Wiki](https://github.com/42GS/minishell/wiki)
@@ -24,7 +24,7 @@
 
 ## 1. 추천 열람 순서 (면접관 · 리뷰어 3분 가이드)
 
-아래 순서대로 보면 설계 의도와 검증 결과를 가장 빠르게 확인할 수 있습니다.
+설계 의도와 검증 결과 빠른 파악용 권장 순서
 
 1. **시스템 아키텍처 4대 명세**
    - [Phase 1: Parser & AST](wiki/architecture/01_parser_and_ast.md) — DFA Lexer, EBNF 우선순위, AST 구조체
@@ -50,7 +50,7 @@
 
 ## 2. 이중 저장소 설계-구현 파이프라인
 
-원문 스펙(`raw/`)에서 아키텍처(`wiki/`)를 먼저 설계한 뒤 `42GS/minishell`을 구현하고, 검증 결과를 회고록으로 환류했습니다.
+원문 스펙(`raw/`)에서 아키텍처(`wiki/`) 선행 확정 후 `42GS/minishell` 구현, 검증 결과를 회고록으로 환류하는 구조
 
 ```mermaid
 graph TD
@@ -71,7 +71,7 @@ graph TD
 
 ## 3. 디렉터리별 문서 카탈로그
 
-전체 상호 참조 목록은 [index.md](index.md)에서 확인할 수 있습니다.
+전체 상호 참조 목록: [index.md](index.md)
 
 | 디렉터리 | 분류 | 주요 내용 | 진입 문서 |
 | :--- | :--- | :--- | :--- |
@@ -88,7 +88,7 @@ graph TD
 
 ## 4. 설계 선행 성과 & 문서 품질 자동 검증 (`scripts/lint_wiki.py`)
 
-동일 머신(`LC_ALL=C`, Bash 1:1 차등 비교) 기준으로 구버전(`42GS/minishell-old`)과 비교한 수치입니다. ([계측 원문](wiki/eval/legacy_retrospective.md))
+동일 머신(`LC_ALL=C`, Bash 1:1 차등 비교) 기준 구버전(`42GS/minishell-old`) 대조 수치 ([계측 원문](wiki/eval/legacy_retrospective.md))
 
 | 지표 | `minishell-old` (구버전) | `minishell` (재설계) | 개선 결과 |
 | :--- | :--- | :--- | :--- |

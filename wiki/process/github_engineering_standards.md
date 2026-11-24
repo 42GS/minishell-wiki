@@ -3,13 +3,13 @@
 > **Navigation**: [[index|Hub: Index]] | [[CLAUDE|Schema & Rules]] | [[wiki/process/roadmap_and_issues|Dual-Repo Roadmap]]  
 > **Code Repository**: `git@github.com:42GS/minishell.git` | **Wiki Repository**: `git@github.com:42GS/minishell-wiki.git`  
 > **Templates**: `templates/github/` (Issue/PR Templates, CI Workflow)  
-> **Purpose**: 단순한 과제 제출용 리포지토리를 넘어, 테크 기업 백엔드/시스템 소프트웨어 엔지니어 채용 관점에서 기술적 깊이와 협업 역량을 증명하는 레퍼런스 포트폴리오 구축 전략입니다.
+> **Purpose**: 백엔드·시스템 소프트웨어 엔지니어링 관점의 기술 깊이 및 추적성 확보용 포트폴리오 표준
 
 ---
 
-## 1. Portfolio Philosophy: What Recruiters Look For
+## 1. Portfolio Philosophy: Core Competencies
 
-채용 담당자와 시니어 엔지니어가 지원자의 깃허브 리포지토리를 평가할 때 가장 주목하는 4대 핵심 역량은 다음과 같습니다:
+깃허브 저장소 평가 시 핵심 4대 엔지니어링 역량:
 
 ```mermaid
 graph TD
@@ -21,20 +21,16 @@ graph TD
     Repo --> C4["4. Quality Assurance: CI Automation Gate"]
 ```
 
-1. **공학적 규율 (Engineering Discipline)**:
-   - 무의미한 커밋 메시지(`fix`, `update`, `asdf`)를 배제하고, 원자적(Atomic) 단위의 커밋과 일관된 커밋 컨벤션을 유지하는가?
-2. **문제 정의와 추적성 (Traceability)**:
-   - 모든 코드 변경의 발단(이슈)과 해결 과정(PR), 그리고 최종 결과(머지)가 링크로 100% 추적 가능한가?
-3. **설계 의도와 트레이드오프 설명력 (Architectural Communication)**:
-   - PR 본문에 단순 코드 설명이 아닌 "왜 이 방식을 선택했는지(Why)", "어떤 대안을 고려하고 배제했는지(Trade-off)"를 명시하는가?
-4. **품질 자동화 (Quality Automation)**:
-   - 사람의 수동 검증에 의존하지 않고, CI를 통해 코드 컨벤션(Norminette), 빌드 무결성, 메모리 누수를 자동으로 게이팅(Gatekeeper)하는가?
+1. **공학적 규율 (Engineering Discipline)**: 원자적(Atomic) 단위 커밋 분리 및 일관된 커밋 컨벤션 유지
+2. **문제 정의와 추적성 (Traceability)**: 모든 변경의 발단(이슈), 해결(PR), 머지 이력의 100% 상호 연결
+3. **설계 의도 및 트레이드오프 (Architectural Communication)**: PR 본문 내 선택 이유(Why)와 배제 대안(Trade-off) 명시
+4. **품질 자동화 (Quality Automation)**: CI 기반 코드 컨벤션(Norminette), 엄격 빌드, 메모리 누수 자동 게이팅
 
 ---
 
 ## 2. Git Branching Strategy: GitHub Flow
 
-복잡한 Git Flow 대신, 가볍고 명확하며 현대적인 **GitHub Flow**를 적용합니다.
+단순하고 명확한 **GitHub Flow** 적용
 
 ```mermaid
 gitGraph
@@ -59,14 +55,14 @@ gitGraph
 - **문서화**: `docs/<short-description>` (예: `docs/update-readme-c4-diagram`)
 
 ### 2.2 메인 브랜치 (`main`) 보호 원칙
-- `main` 브랜치는 **상시 정상 컴파일, Norm 통과, 릭 제로, 평가 통과 상태**를 유지해야 합니다.
-- `main` 브랜치로의 직접 푸시(`git push origin main`)는 금지되며, 반드시 **PR(Pull Request)을 통해서만 머지**합니다.
+- `main` 브랜치의 상시 정상 컴파일, Norm 통과, 릭 제로, 평가 통과 상태 유지
+- `main` 직접 푸시(`git push origin main`) 금지, **PR(Pull Request) 전용 머지** 강제
 
 ---
 
 ## 3. Conventional Commits Specification
 
-모든 커밋 메시지는 [Conventional Commits 1.0.0](https://www.conventionalcommits.org/) 표준을 따릅니다.
+[Conventional Commits 1.0.0](https://www.conventionalcommits.org/) 표준 준수
 
 ### 3.1 커밋 메시지 포맷
 ```text
@@ -103,7 +99,7 @@ Closes #27
 
 ## 4. Milestone & Label Architecture
 
-프로젝트의 진행 상황을 한눈에 파악할 수 있도록 5단계 마일스톤과 라벨 체계를 구성합니다.
+진행 상황 추적용 5단계 마일스톤 및 4계층 라벨 체계
 
 ### 4.1 마일스톤 (Milestones)
 1. **M1: Architecture & Scaffolding** (인프라, 뼈대, 자료구조, 빌드 시스템)
@@ -122,7 +118,7 @@ Closes #27
 
 ## 5. GitHub Actions CI Pipeline Specification
 
-모든 PR이 생성되거나 `main`에 코드가 푸시될 때 자동으로 실행되는 품질 게이트웨이 파이프라인입니다.
+PR 생성 및 `main` 푸시 시 자동 실행되는 품질 게이트 파이프라인:
 
 ```mermaid
 flowchart LR
@@ -134,6 +130,6 @@ flowchart LR
 ```
 
 ### CI 검증 항목
-1. **Norminette Check**: 최신 42 Norminette 파이썬 패키지를 설치하고 전체 소스코드의 컨벤션 위반을 검사합니다.
-2. **Strict Compilation**: `cc -Wall -Wextra -Werror` 플래그 및 `make`, `make re`, `make bonus` 무결점 빌드를 검사합니다.
-3. **Memory Leak Gate**: Valgrind 환경에서 파이프라인, 리다이렉션, 에러 상황 테스트 시 힙 릭 0바이트(`definitely lost: 0`, `indirectly lost: 0`)를 검증합니다.
+1. **Norminette Check**: 전체 소스코드 42 Norminette 컨벤션 위반 검사
+2. **Strict Compilation**: `cc -Wall -Wextra -Werror` 및 `make`, `make re`, `make bonus` No-Relink 빌드 검사
+3. **Memory Leak Gate**: Valgrind 환경 파이프라인·리다이렉션·에러 케이스 힙 릭 0바이트(`definitely lost: 0`, `indirectly lost: 0`) 검증
