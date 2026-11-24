@@ -1,7 +1,7 @@
 # Minishell LLM Wiki Index
 
 > **Minishell Knowledge Base Catalog**  
-> 모든 위키 문서의 목록과 카테고리별 요약 및 상호 참조 링크입니다.
+> 위키 문서 목록, 카테고리별 요약 및 상호 참조 링크 카탈로그
 
 ---
 

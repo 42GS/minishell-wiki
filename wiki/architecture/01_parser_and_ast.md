@@ -9,7 +9,7 @@
 
 ## 1. Architectural Pipeline Overview
 
-사용자의 원시 입력 라인(`char *line`)은 실행 엔진([[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]])에 도달하기 전 4단계 데이터 변환 파이프라인을 거칩니다.
+원시 입력 라인(`char *line`)의 실행 엔진([[wiki/architecture/02_execution_engine_and_ipc|Phase 2 Execution Engine]]) 전달 전 4단계 데이터 변환 파이프라인:
 
 ```mermaid
 flowchart LR
@@ -21,16 +21,16 @@ flowchart LR
     AST --> Executor["Execution Engine"]
 ```
 
-1. **Lexical Analysis (Lexer/Tokenizer)**: 원시 문자열을 의미 있는 최소 단위인 토큰(`WORD`, `PIPE`, `AND`, `OR`, `LPAREN`, `RPAREN`, `REDIR_*`)으로 분해합니다. (상세 상태 머신: [[wiki/concepts/deep_dive_lexer_parser_ast|DFA 상태 전이도]])
-2. **Syntax Validation**: 문법 규칙에 어긋나는 토큰 배열(예: `echo a | | cat`, `(cmd &&)`)을 사전에 검증하고 Bash 호환 구문 에러를 반환합니다.
-3. **Syntactic Analysis (Parser)**: 연산자 우선순위(Precedence)와 결합 법칙(Associativity)에 따라 토큰 스트림을 계층적 트리 구조(AST)로 조립합니다.
-4. **Tree Traversal (Executor)**: 완성된 AST를 [[wiki/architecture/02_execution_engine_and_ipc|실행 엔진]]으로 전달하여 후위/중위 순회하며 조건부 실행과 IPC 파이프라인을 구동합니다.
+1. **Lexical Analysis (Lexer/Tokenizer)**: 원시 문자열을 의미 단위 토큰(`WORD`, `PIPE`, `AND`, `OR`, `LPAREN`, `RPAREN`, `REDIR_*`)으로 분해 (상세 상태 머신: [[wiki/concepts/deep_dive_lexer_parser_ast|DFA 상태 전이도]])
+2. **Syntax Validation**: 문법 오류 토큰 배열(예: `echo a | | cat`, `(cmd &&)`) 사전 검증 및 Bash 호환 구문 에러 반환
+3. **Syntactic Analysis (Parser)**: 연산자 우선순위(Precedence) 및 결합 법칙(Associativity) 기반 계층적 트리(AST) 조립
+4. **Tree Traversal (Executor)**: 완성된 AST를 [[wiki/architecture/02_execution_engine_and_ipc|실행 엔진]]으로 전달, 후위/중위 순회하며 조건부 실행 및 IPC 파이프라인 구동
 
 ---
 
 ## 2. Formal Grammar Definition (EBNF)
 
-Minishell의 문법은 POSIX Shell 문법의 하위 집합으로, 상위 우선순위 연산자가 파서 트리의 하위 노드로 내려가는 하향식 계층 구조를 갖습니다.
+POSIX Shell 문법의 하위 집합. 상위 우선순위 연산자가 파서 트리의 하위 노드로 내려가는 하향식 계층 구조:
 
 ```ebnf
 complete_command ::= and_or_list EOF
@@ -89,7 +89,7 @@ typedef struct s_token {
 ```
 
 ### 3.2 Redirection Node
-리다이렉션은 명령어 실행 전 파일 디스크립터(FD)를 재배치하는 메타데이터이므로, 명령어 노드에 연결 리스트로 첨부됩니다. (실행 상세: [[wiki/architecture/02_execution_engine_and_ipc|리다이렉션 엔진]])
+명령어 실행 전 파일 디스크립터(FD)를 재배치하는 메타데이터로 명령어 노드에 연결 리스트 첨부 (실행 상세: [[wiki/architecture/02_execution_engine_and_ipc|리다이렉션 엔진]])
 ```c
 typedef enum e_redir_type {
     REDIR_IN,           /* < */
@@ -108,7 +108,7 @@ typedef struct s_redir {
 ```
 
 ### 3.3 Abstract Syntax Tree (AST) Node
-트리의 노드는 명령어 단독 실행 노드일 수도 있고, 논리 연산자/파이프 노드일 수도 있습니다.
+명령어 단독 실행 노드 또는 논리 연산자/파이프 노드 표현
 ```c
 typedef enum e_node_type {
     NODE_COMMAND,       /* 단순 명령어 (argv, redirs) */
@@ -133,7 +133,7 @@ typedef struct s_ast_node {
 
 ## 4. Parser Implementation Logic (Recursive Descent)
 
-재귀 하향 파서는 EBNF 문법 규칙과 1:1로 대응되는 파싱 함수를 갖습니다:
+EBNF 문법 규칙과 1:1 대응되는 재귀 하향 파서 함수 구성:
 
 ```mermaid
 graph TD
@@ -145,39 +145,39 @@ graph TD
 ```
 
 1. **`parse_and_or(t_token **curr)`**:
-   - `left = parse_pipeline(curr)`를 호출합니다.
-   - 현재 토큰이 `&&` 또는 `||`인 동안 다음을 반복합니다:
-     - 연산자 타입을 기록하고 토큰을 진행합니다.
-     - `right = parse_pipeline(curr)`를 호출합니다.
-     - 새 부모 노드 `node(type, left, right)`를 생성한 뒤 `left = node`로 갱신합니다.
-   - `left`를 반환합니다.
+   - `left = parse_pipeline(curr)` 호출
+   - 현재 토큰이 `&&` 또는 `||`인 동안 반복:
+     - 연산자 타입 기록 및 토큰 진행
+     - `right = parse_pipeline(curr)` 호출
+     - 새 부모 노드 `node(type, left, right)` 생성 후 `left = node` 갱신
+   - `left` 반환
 
 2. **`parse_pipeline(t_token **curr)`**:
-   - `left = parse_command(curr)`를 호출합니다.
-   - 현재 토큰이 `|`인 동안 다음을 반복합니다:
-     - 토큰을 진행합니다.
-     - `right = parse_command(curr)`를 호출합니다.
-     - 새 부모 노드 `node(NODE_PIPE, left, right)`를 생성한 뒤 `left = node`로 갱신합니다.
-   - `left`를 반환합니다.
+   - `left = parse_command(curr)` 호출
+   - 현재 토큰이 `|`인 동안 반복:
+     - 토큰 진행
+     - `right = parse_command(curr)` 호출
+     - 새 부모 노드 `node(NODE_PIPE, left, right)` 생성 후 `left = node` 갱신
+   - `left` 반환
 
 3. **`parse_command(t_token **curr)`**:
    - `curr->type == TOKEN_LPAREN`인 경우:
-     - 토큰을 진행해 `(`를 소비합니다.
-     - `sub_tree = parse_and_or(curr)`를 호출합니다.
-     - `curr->type == TOKEN_RPAREN`인지 검증하고 소비합니다.
-     - 뒤따라오는 리다이렉션(`<`, `>` 등)을 파싱하여 첨부합니다.
-     - `create_subshell_node(sub_tree, redirs)`를 반환합니다.
-   - 그렇지 않으면 `parse_simple_command(curr)`를 호출합니다.
+     - 토큰 진행 (`(` 소비)
+     - `sub_tree = parse_and_or(curr)` 호출
+     - `curr->type == TOKEN_RPAREN` 검증 및 소비
+     - 후속 리다이렉션(`<`, `>` 등) 파싱 및 첨부
+     - `create_subshell_node(sub_tree, redirs)` 반환
+   - 그 외: `parse_simple_command(curr)` 호출
 
 4. **`parse_simple_command(t_token **curr)`**:
-   - `WORD` 및 `REDIR_*` 토큰들을 수집해 `argv` 배열과 `t_redir` 리스트를 구성합니다.
-   - `create_command_node(argv, redirs)`를 반환합니다.
+   - `WORD` 및 `REDIR_*` 토큰 수집 후 `argv` 배열과 `t_redir` 리스트 구성
+   - `create_command_node(argv, redirs)` 반환
 
 ---
 
 ## 5. Syntax Error Rules & Bash Compatibility
 
-파싱 도중 문법 오류가 발견되면 즉시 파싱을 중단하고 트리를 정리한 뒤, Bash 표준 에러 메시지를 출력하고 종료 상태 코드를 `2`로 설정합니다. (평가 검증: [[wiki/requirements/evaluation_matrix|평가 매트릭스 Syntax Error 방어]])
+파싱 중 문법 오류 발견 시 즉시 중단 및 트리 정리, Bash 표준 에러 출력 후 종료 상태 `2` 설정 (평가 검증: [[wiki/requirements/evaluation_matrix|평가 매트릭스 Syntax Error 방어]])
 
 | 상황 | 입력 예시 | Bash 표준 에러 메시지 | 종료 상태 (`$?`) |
 | :--- | :--- | :--- | :---: |
@@ -192,7 +192,7 @@ graph TD
 
 ## 6. Memory Lifecycle Management
 
-AST는 동적 메모리를 깊은 트리 구조로 점유하므로, 메모리 릭(Leak)과 이중 해제(Double Free)를 방지하는 재귀적 클린업 함수가 필수입니다.
+깊은 트리 구조 동적 메모리의 메모리 릭(Leak)과 이중 해제(Double Free) 차단을 위한 재귀적 클린업 함수 필수
 
 ```c
 void free_ast(t_ast_node *node)
@@ -208,6 +208,6 @@ void free_ast(t_ast_node *node)
     free(node);
 }
 ```
-- **성공 시**: 트리를 순회하여 [[wiki/architecture/02_execution_engine_and_ipc|실행 완료]] 후 루트 노드에서 `free_ast(root)`를 호출합니다.
-- **파싱 실패(Syntax Error) 시**: 파싱 도중 생성된 부분 트리를 즉시 `free_ast(partial_tree)`로 일괄 해제하고 토큰 리스트도 함께 해제합니다.
-- **Here-doc 중단 시**: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 핸들러]]가 개입하면 임시로 열려 있는 모든 `heredoc_fd`를 `close`한 후 트리를 해제합니다.
+- **성공 시**: 트리 순회 [[wiki/architecture/02_execution_engine_and_ipc|실행 완료]] 후 루트 노드 `free_ast(root)` 호출
+- **파싱 실패(Syntax Error) 시**: 도중 생성된 부분 트리 `free_ast(partial_tree)` 즉시 일괄 해제 및 토큰 리스트 해제
+- **Here-doc 중단 시**: [[wiki/architecture/03_signal_dispatcher_and_state_machine|시그널 핸들러]] 개입 시 열린 모든 `heredoc_fd` `close` 후 트리 해제
